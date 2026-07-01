@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SAVIA · El Espejo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F5EFE3; --cream-soft:#FAF7EF; --cream-border:#E8E0D2;
+  --sage:#5C7C5A; --sage-light:#7BA77F; --forest:#2A3A2A; --forest-soft:#5A6E5A;
+  --clay:#B07050; --clay-light:#C88468; --muted:#8A9A8A;
+  --ok:#9FE6A8; --warn:#F0D08A;
+  --warmwhite:#FFF7EC;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--forest);
+  background:radial-gradient(1300px 760px at 50% -14%, #ECE3D2, transparent), #EFE8D9;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 46px}
+.serif{font-family:'Cormorant Garamond',serif}
+.lede{text-align:center;max-width:600px;margin-bottom:18px}
+.lede h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:29px;letter-spacing:-.2px;color:var(--forest)}
+.lede p{color:var(--forest-soft);font-size:12.5px;margin-top:6px;line-height:1.55}
+.lede .hint{display:inline-block;margin-top:10px;font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--cream-border);border-radius:999px;padding:6px 13px}
+
+/* ===== phone ===== */
+.phone{width:392px;max-width:100%;height:806px;border-radius:54px;background:#06080a;padding:9px;position:relative;
+  box-shadow:0 60px 120px -40px rgba(20,28,18,.7), 0 0 0 1px rgba(0,0,0,.06), inset 0 0 0 2px #14171a}
+.screen{position:relative;width:100%;height:100%;border-radius:45px;overflow:hidden;background:#06080a}
+.dyn{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:104px;height:29px;background:#000;border-radius:18px;z-index:90}
+
+.step{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .5s ease;display:flex;flex-direction:column}
+.step.active{opacity:1;pointer-events:auto}
+.statusbar{position:absolute;top:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;z-index:95;font-size:13px;font-weight:600;pointer-events:none}
+.statusbar.dark{color:var(--forest)} .statusbar.light{color:rgba(255,255,255,.92)}
+.statusbar .r{font-size:11px;letter-spacing:.5px}
+
+/* ===== INTRO ===== */
+#s-intro{background:radial-gradient(640px 440px at 50% 6%, rgba(123,167,127,.2), transparent),linear-gradient(180deg,var(--cream-soft),var(--cream))}
+.intro-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 38px}
+.mirror-emblem{width:172px;height:172px;border-radius:50%;position:relative;margin-bottom:32px;display:flex;align-items:center;justify-content:center}
+.mirror-emblem .glass{position:absolute;inset:16px;border-radius:50%;background:
+  radial-gradient(circle at 50% 38%, #fffdf8, #f3ece0 58%, #e7ddcc 78%);overflow:hidden;
+  box-shadow:inset 0 6px 20px rgba(255,255,255,.9), inset 0 -8px 26px rgba(120,110,92,.18)}
+.mirror-emblem .glass::after{content:"";position:absolute;top:-30%;left:-20%;width:80%;height:80%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.85),transparent 60%);transform:rotate(-18deg)}
+.mirror-emblem .lightrim{position:absolute;inset:0;border-radius:50%;
+  box-shadow:0 0 0 5px var(--warmwhite), 0 0 26px 6px rgba(255,247,236,.95), 0 0 60px 18px rgba(255,243,224,.6), 0 0 100px 36px rgba(255,240,214,.32);
+  animation:breathe 4.6s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.82;transform:scale(1)}50%{opacity:1;transform:scale(1.012)}}
+.mirror-emblem .face{position:relative;z-index:3;width:62px;height:62px;opacity:.7}
+.kick{font-size:11px;letter-spacing:3.4px;text-transform:uppercase;color:var(--clay);font-weight:600;margin-bottom:12px}
+.intro-wrap h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:37px;line-height:1.02;color:var(--forest);margin-bottom:14px;letter-spacing:-.5px}
+.intro-wrap .lead{font-size:14.5px;line-height:1.64;color:var(--forest-soft);max-width:296px}
+.feats{display:flex;flex-direction:column;gap:8px;margin-top:26px;width:100%;max-width:300px}
+.feat{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--cream-border);border-radius:15px;padding:11px 14px;text-align:left}
+.feat .fi{width:32px;height:32px;border-radius:10px;background:rgba(123,167,127,.15);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.feat .fi svg{width:17px;height:17px}
+.feat .ft{font-size:12.5px;font-weight:600;color:var(--forest)}
+.feat .fm{font-size:11px;color:var(--forest-soft);margin-top:1px}
+.cta{padding:16px 26px 30px;width:100%}
+.cta .sub{font-size:11px;color:var(--muted);text-align:center;margin-top:12px}
+
+.btn{width:100%;border:none;border-radius:16px;padding:16px;font-size:14.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:transform .15s,box-shadow .25s;letter-spacing:.2px}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--forest);color:var(--cream);box-shadow:0 16px 32px -14px rgba(42,58,42,.6)}
+.btn-clay{background:var(--clay);color:#fff;box-shadow:0 16px 32px -14px rgba(176,112,80,.55)}
+.btn-ghost{background:rgba(255,255,255,.9);color:var(--forest);border:1px solid var(--cream-border)}
+.btn-light{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.32);backdrop-filter:blur(8px)}
+
+/* ===== THE MIRROR ===== */
+#s-mirror{background:#06080a}
+.mirror{position:absolute;inset:0;overflow:hidden;border-radius:45px}
+#video,#frozen{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:saturate(1.02) contrast(1.02)}
+#frozen{display:none;z-index:2}
+.nofeed{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 44px;z-index:3;
+  background:radial-gradient(440px 540px at 50% 42%, #2a2f28, #0c0f0b 74%);color:#fff}
+.nofeed svg{width:44px;height:44px;opacity:.78;margin-bottom:16px}
+.nofeed b{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:500}
+.nofeed span{font-size:12.5px;opacity:.72;margin-top:8px;line-height:1.5;max-width:250px}
+.nofeed button{margin-top:18px}
+
+/* warm-white light frame — the soul of the experience */
+.lightframe{position:absolute;inset:0;border-radius:45px;pointer-events:none;z-index:20;opacity:0;transition:opacity 1.1s ease}
+.mirror.lit .lightframe{opacity:1}
+.lightframe .rim{position:absolute;inset:0;border-radius:45px;
+  border:7px solid var(--warmwhite);
+  box-shadow:
+    0 0 26px 5px rgba(255,247,236,.95),
+    0 0 70px 18px rgba(255,242,222,.6),
+    inset 0 0 30px 8px rgba(255,247,236,.9),
+    inset 0 0 80px 26px rgba(255,243,224,.45),
+    inset 0 0 150px 50px rgba(255,238,212,.22);
+  animation:rimbreathe 5.2s ease-in-out infinite}
+@keyframes rimbreathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.12)}}
+.sheen{position:absolute;top:-30%;left:-60%;width:60%;height:160%;z-index:21;pointer-events:none;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.12),transparent);transform:rotate(8deg);
+  animation:sweep 7s ease-in-out infinite}
+@keyframes sweep{0%{left:-60%}55%,100%{left:130%}}
+.softvig{position:absolute;inset:0;z-index:19;pointer-events:none;background:radial-gradient(116% 86% at 50% 41%, transparent 46%, rgba(8,11,8,.34) 100%)}
+
+/* elegant etched face guide */
+.guide{position:absolute;left:50%;top:41%;transform:translate(-50%,-50%);width:228px;height:304px;z-index:22;pointer-events:none;transition:.5s}
+.guide .oval{position:absolute;inset:0;border-radius:50%/53% 53% 47% 47%;border:1.5px solid rgba(255,255,255,.55);transition:.5s}
+.mirror.aligned .guide .oval{border-color:rgba(159,230,168,.95);box-shadow:0 0 30px rgba(159,230,168,.5), inset 0 0 26px rgba(159,230,168,.16)}
+.corner{position:absolute;width:16px;height:16px;border:1.5px solid rgba(255,255,255,.75);transition:.5s}
+.mirror.aligned .corner{border-color:rgba(159,230,168,.95)}
+.corner.tl{top:-2px;left:-2px;border-right:0;border-bottom:0;border-radius:7px 0 0 0}
+.corner.tr{top:-2px;right:-2px;border-left:0;border-bottom:0;border-radius:0 7px 0 0}
+.corner.bl{bottom:-2px;left:-2px;border-right:0;border-top:0;border-radius:0 0 0 7px}
+.corner.br{bottom:-2px;right:-2px;border-left:0;border-top:0;border-radius:0 0 7px 0}
+.turn{position:absolute;top:50%;transform:translateY(-50%);font-size:34px;color:transparent;z-index:23;transition:.4s;font-weight:300}
+.turn.show{color:rgba(159,230,168,.92)}
+.turn.right{right:20px;animation:nR 1.4s ease-in-out infinite}
+.turn.left{left:20px;animation:nL 1.4s ease-in-out infinite}
+@keyframes nR{0%,100%{transform:translateY(-50%) translateX(0)}50%{transform:translateY(-50%) translateX(8px)}}
+@keyframes nL{0%,100%{transform:translateY(-50%) translateX(0)}50%{transform:translateY(-50%) translateX(-8px)}}
+
+/* chrome */
+.m-top{position:absolute;top:56px;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.iconbtn{width:36px;height:36px;border-radius:50%;background:rgba(12,15,11,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.pips{display:flex;gap:6px}
+.pip{width:22px;height:3px;border-radius:999px;background:rgba(255,255,255,.3);transition:.35s}
+.pip.on{background:#fff;width:28px}
+.pip.done{background:var(--ok)}
+
+.m-guide{position:absolute;top:104px;left:0;right:0;text-align:center;z-index:29;color:#fff;pointer-events:none}
+.m-guide .gk{font-size:10px;letter-spacing:2.6px;text-transform:uppercase;opacity:.72;font-weight:600}
+.m-guide .gt{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:500;margin-top:3px;text-shadow:0 2px 22px rgba(0,0,0,.45)}
+
+/* refined condition row */
+.cond{position:absolute;left:0;right:0;bottom:176px;z-index:29;display:flex;gap:18px;justify-content:center;color:#fff}
+.cnd{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:500;letter-spacing:.3px;opacity:.62;transition:.4s}
+.cnd .led{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);transition:.4s}
+.cnd.ok{opacity:1}
+.cnd.ok .led{background:var(--ok);box-shadow:0 0 10px 1px rgba(159,230,168,.8)}
+.exp{position:absolute;left:0;right:0;bottom:148px;text-align:center;z-index:29;color:rgba(255,255,255,.7);font-size:11px;letter-spacing:.2px}
+.coachtip{position:absolute;top:148px;left:50%;transform:translateX(-50%);z-index:31;background:rgba(176,112,80,.94);color:#fff;font-size:11px;font-weight:600;padding:7px 14px;border-radius:999px;white-space:nowrap;box-shadow:0 10px 26px -8px rgba(0,0,0,.5);transition:opacity .4s}
+
+/* dock */
+.dock{position:absolute;left:0;right:0;bottom:0;height:140px;z-index:30;padding:0 30px 26px;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(0deg, rgba(6,8,6,.9) 28%, transparent)}
+.slot{width:52px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.slot .ph{width:40px;height:52px;border-radius:9px;border:1.5px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);overflow:hidden;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4);font-size:16px}
+.slot .ph img{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.slot .ph.filled{border-color:var(--ok)}
+.slot small{font-size:9px;color:rgba(255,255,255,.65);letter-spacing:.3px}
+.shutter{width:76px;height:76px;border-radius:50%;border:3px solid rgba(255,255,255,.9);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.3s;flex:0 0 auto}
+.shutter .core{width:60px;height:60px;border-radius:50%;background:#fff;transition:.25s}
+.shutter:disabled{opacity:.42;cursor:default}
+.shutter.armed{box-shadow:0 0 0 6px rgba(159,230,168,.28), 0 0 28px rgba(159,230,168,.35)}
+.shutter.armed .core{background:var(--ok)}
+.shutter:not(:disabled):active .core{transform:scale(.85)}
+
+.lightflare{position:absolute;inset:0;border-radius:45px;z-index:40;pointer-events:none;opacity:0;
+  box-shadow:inset 0 0 60px 30px var(--warmwhite), inset 0 0 160px 80px rgba(255,247,236,.9)}
+.lightflare.go{animation:flare .55s ease}
+@keyframes flare{0%{opacity:0}24%{opacity:1}100%{opacity:0}}
+
+/* ===== REVIEW ===== */
+#s-review{background:#06080a}
+.rv{position:absolute;inset:0}
+.rv-img{position:absolute;inset:0;z-index:1}
+.rv-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.rv-img .fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(420px 520px at 50% 40%,#2a2f28,#0c0f0b);color:rgba(255,255,255,.5);font-size:22px}
+.rv-lightframe{position:absolute;inset:0;border-radius:45px;pointer-events:none;z-index:3;
+  border:6px solid rgba(255,247,236,.85);box-shadow:0 0 24px 4px rgba(255,247,236,.55), inset 0 0 50px 14px rgba(255,243,224,.3)}
+.rv-grad{position:absolute;inset:0;z-index:2;background:linear-gradient(0deg, rgba(6,8,6,.95) 8%, rgba(6,8,6,.12) 42%, rgba(6,8,6,.5) 100%)}
+.rv-top{position:absolute;top:56px;left:22px;right:22px;z-index:5;display:flex;justify-content:space-between;align-items:center}
+.rv-badge{background:rgba(12,15,11,.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:11.5px;font-weight:500;padding:8px 14px;border-radius:999px;display:flex;gap:7px;align-items:center}
+.rv-panel{position:absolute;left:16px;right:16px;bottom:120px;z-index:6;background:rgba(247,241,229,.97);backdrop-filter:blur(20px);border-radius:24px;padding:19px 19px 17px;box-shadow:0 28px 56px -20px rgba(0,0,0,.5)}
+.rv-panel .ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.rv-panel .ph .t{font-size:11.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--forest-soft)}
+.verdict{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:999px;background:rgba(123,167,127,.18);color:var(--sage)}
+.qrow{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.qrow:last-child{margin-bottom:0}
+.qrow .ql{font-size:12.5px;color:var(--forest-soft);width:72px}
+.qbar{flex:1;height:7px;border-radius:999px;background:#E5DCCB;overflow:hidden}
+.qfill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--sage),var(--sage-light));width:0;transition:width .85s cubic-bezier(.4,0,.2,1)}
+.qrow .qv{font-size:11.5px;color:var(--forest);font-weight:600;width:30px;text-align:right}
+.rv-dock{position:absolute;left:0;right:0;bottom:0;z-index:6;padding:0 18px 26px;display:flex;gap:11px}
+.rv-dock .btn{box-shadow:none}
+
+/* ===== DONE ===== */
+#s-done{background:radial-gradient(640px 440px at 50% 8%, rgba(123,167,127,.22), transparent),linear-gradient(180deg,var(--cream-soft),var(--cream))}
+.done-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 32px}
+.seal{width:98px;height:98px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:24px;
+  background:radial-gradient(circle at 50% 40%, #3a5235, #21301c);
+  box-shadow:0 0 0 5px var(--warmwhite), 0 0 30px 8px rgba(255,247,236,.8), 0 22px 46px -16px rgba(42,58,42,.6)}
+.seal svg{width:42px;height:42px;z-index:2}
+.done-wrap h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:34px;color:var(--forest);margin-bottom:13px;line-height:1.05;letter-spacing:-.4px}
+.done-wrap .lead{font-size:13.5px;line-height:1.6;color:var(--forest-soft);max-width:292px}
+.thumbs{display:flex;gap:12px;margin:26px 0 4px}
+.thumb{width:84px;height:106px;border-radius:15px;overflow:hidden;position:relative;background:#222a1e;
+  box-shadow:0 0 0 3px var(--warmwhite), 0 12px 26px -10px rgba(0,0,0,.45)}
+.thumb img{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.thumb .fb{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:22px}
+.thumb .tl{position:absolute;bottom:0;left:0;right:0;background:rgba(6,8,6,.72);color:#fff;font-size:8.5px;font-weight:500;padding:4px;text-align:center;letter-spacing:.4px}
+.thumb .chk{position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:var(--ok);color:#142a16;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800}
+.savechip{margin-top:14px;font-size:10.5px;color:var(--forest-soft);background:#fff;border:1px solid var(--cream-border);border-radius:999px;padding:8px 14px}
+.savechip b{color:var(--sage)}
+
+.controls{margin-top:20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.controls button{font-size:12px;font-family:inherit;font-weight:600;color:var(--forest);background:#fff;border:1px solid var(--cream-border);border-radius:10px;padding:9px 16px;cursor:pointer}
+.controls .note{font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="lede">
+  <h1 class="serif">El Espejo de SAVIA</h1>
+  <p>Permití la cámara: el teléfono se vuelve un espejo y se enciende un halo de luz blanca cálida que te ilumina parejo — la misma luz cada vez, para que tus fotos sean comparables. Si negás el permiso, el flujo sigue funcionando.</p>
+  <span class="hint">↓ Tocá “Encender el espejo”</span>
+</div>
+
+<div class="phone">
+  <div class="dyn"></div>
+  <div class="screen">
+
+    <!-- ===== INTRO ===== -->
+    <section class="step active" id="s-intro">
+      <div class="statusbar dark"><span>9:41</span><span class="r">●●● 100%</span></div>
+      <div class="intro-wrap">
+        <div class="mirror-emblem">
+          <div class="lightrim"></div>
+          <div class="glass"></div>
+          <svg class="face" viewBox="0 0 64 64" fill="none"><ellipse cx="32" cy="25" rx="13" ry="16" stroke="#8A9A7E" stroke-width="2"/><path d="M14 56c2.4-11 9-16 18-16s15.6 5 18 16" stroke="#8A9A7E" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="kick">Tu punto de partida</div>
+        <h2 class="serif">Mirate en<br>tu mejor luz</h2>
+        <p class="lead">El espejo de SAVIA te ilumina parejo y te guía en 3 tomas, para que cada comparación futura sea justa.</p>
+        <div class="feats">
+          <div class="feat"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="#5C7C5A" stroke-width="2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke="#5C7C5A" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <div><div class="ft">Luz constante</div><div class="fm">El espejo te ilumina igual cada vez</div></div></div>
+          <div class="feat"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#5C7C5A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div><div class="ft">Frontal + 2 perfiles</div><div class="fm">El estándar para medir tu evolución</div></div></div>
+          <div class="feat"><div class="fi"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="10" rx="2.5" stroke="#5C7C5A" stroke-width="2"/><path d="M8.5 10V8a3.5 3.5 0 017 0v2" stroke="#5C7C5A" stroke-width="2"/></svg></div>
+            <div><div class="ft">Privada</div><div class="fm">Solo vos y tu clínica</div></div></div>
+        </div>
+      </div>
+      <div class="cta">
+        <button class="btn btn-primary" onclick="startMirror('frontal')">Encender el espejo</button>
+        <div class="sub">~1 minuto · podés repetirla cuando quieras</div>
+      </div>
+    </section>
+
+    <!-- ===== MIRROR ===== -->
+    <section class="step" id="s-mirror">
+      <div class="mirror" id="mirror">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="frozen"></canvas>
+        <div class="nofeed" id="nofeed">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h4l2-2h6l2 2h4v12H3z" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="13" r="3.3" stroke="#fff" stroke-width="1.5"/></svg>
+          <b class="serif">Encendé tu espejo</b>
+          <span>Permití el acceso a la cámara para verte iluminado. O seguí el flujo con la simulación.</span>
+          <button class="btn btn-light" style="width:auto;padding:11px 20px" onclick="retryCam()">Permitir cámara</button>
+        </div>
+
+        <div class="softvig"></div>
+        <div class="lightframe"><div class="rim"></div></div>
+        <div class="sheen"></div>
+
+        <div class="guide" id="guide">
+          <div class="oval"></div>
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+        </div>
+        <div class="turn right" id="turnR">›</div>
+        <div class="turn left" id="turnL">‹</div>
+
+        <div class="m-top">
+          <div class="iconbtn" onclick="stopAndGo('s-intro')">✕</div>
+          <div class="pips" id="pips"><div class="pip on"></div><div class="pip"></div><div class="pip"></div></div>
+          <div class="iconbtn" style="font-size:13px" title="luz">☀</div>
+        </div>
+
+        <div class="m-guide"><div class="gk" id="gK">Toma 1 de 3</div><div class="gt serif" id="gT">Mirá de frente</div></div>
+
+        <div class="cond" id="cond">
+          <div class="cnd" id="cLuz"><span class="led"></span>Luz</div>
+          <div class="cnd" id="cEnc"><span class="led"></span>Encuadre</div>
+          <div class="cnd" id="cDist"><span class="led"></span>Distancia</div>
+        </div>
+        <div class="exp" id="exp">Relajá la cara · expresión neutra</div>
+        <div class="coachtip" id="coachtip">Acomodate dentro del óvalo…</div>
+
+        <div class="dock">
+          <div class="slot"><div class="ph" id="slotFront">◌</div><small>frontal</small></div>
+          <button class="shutter" id="shutter" disabled onclick="capture()"><div class="core"></div></button>
+          <div class="slot"><div class="ph" id="slotSide">◌</div><small id="slotSideLbl">perfiles</small></div>
+        </div>
+        <div class="lightflare" id="flare"></div>
+      </div>
+    </section>
+
+    <!-- ===== REVIEW ===== -->
+    <section class="step" id="s-review">
+      <div class="rv">
+        <div class="rv-img" id="rvImg"></div>
+        <div class="rv-grad"></div>
+        <div class="rv-lightframe"></div>
+        <div class="rv-top">
+          <div class="rv-badge" id="rvBadge">Frontal</div>
+          <div class="rv-badge">🔒 Privada</div>
+        </div>
+        <div class="rv-panel">
+          <div class="ph"><span class="t">Calidad para comparar</span><span class="verdict" id="rvVerdict">Comparable ✓</span></div>
+          <div class="qrow"><span class="ql">Luz</span><div class="qbar"><div class="qfill" id="qLuz"></div></div><span class="qv" id="vLuz">4/5</span></div>
+          <div class="qrow"><span class="ql">Ángulo</span><div class="qbar"><div class="qfill" id="qAng"></div></div><span class="qv" id="vAng">5/5</span></div>
+          <div class="qrow"><span class="ql">Distancia</span><div class="qbar"><div class="qfill" id="qDist"></div></div><span class="qv" id="vDist">4/5</span></div>
+        </div>
+        <div class="rv-dock">
+          <button class="btn btn-ghost" onclick="reShoot()">Repetir</button>
+          <button class="btn btn-primary" onclick="nextAngle()">Usar esta</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DONE ===== -->
+    <section class="step" id="s-done">
+      <div class="statusbar dark"><span>9:42</span><span class="r">●●● 100%</span></div>
+      <div class="done-wrap">
+        <div class="seal"><svg viewBox="0 0 44 44" fill="none"><path d="M12 23l6.5 6.5L33 14" stroke="#F5EFE3" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="kick">Baseline guardado</div>
+        <h2 class="serif">Tu reflejo de hoy<br>quedó registrado</h2>
+        <p class="lead">Desde acá, SAVIA mide tu evolución sobre una base justa. Tu doctora interpreta los cambios.</p>
+        <div class="thumbs" id="doneThumbs"></div>
+        <div class="savechip">Guardado como <b>foto inicial</b> · privado · 3 ángulos</div>
+      </div>
+      <div class="cta"><button class="btn btn-clay" onclick="restart()">Volver al inicio</button></div>
+    </section>
+
+  </div>
+</div>
+
+<div class="controls">
+  <button onclick="restart()">↺ Reiniciar flujo</button>
+  <span class="note">Prototipo · cámara real + luz de espejo · guardado simulado</span>
+</div>
+
+<script>
+const order=['frontal','perfil_d','perfil_i'];
+const labels={
+  frontal:{k:'Toma 1 de 3',t:'Mirá de frente',exp:'Relajá la cara · expresión neutra',arrow:null,badge:'Frontal'},
+  perfil_d:{k:'Toma 2 de 3',t:'Girá a tu derecha',exp:'Perfil completo · mentón paralelo al piso',arrow:'right',badge:'Perfil derecho'},
+  perfil_i:{k:'Toma 3 de 3',t:'Girá a tu izquierda',exp:'Perfil completo · mentón paralelo al piso',arrow:'left',badge:'Perfil izquierdo'}
+};
+let current='frontal',captured={},quality={},stream=null,video=null,loop=null,hasCam=false;
+function $(id){return document.getElementById(id);}
+function show(id){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
+
+async function ensureCam(){
+  if(stream)return true;
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:1080},height:{ideal:1440}},audio:false});
+    video=$('video');video.srcObject=stream;await video.play().catch(()=>{});
+    hasCam=true;$('nofeed').style.display='none';return true;
+  }catch(e){hasCam=false;$('nofeed').style.display='flex';return false;}
+}
+async function retryCam(){stream=null;await ensureCam(); if(hasCam) lightOn();}
+
+async function startMirror(angle){ await ensureCam(); goAngle(angle); lightOn(); }
+function lightOn(){ requestAnimationFrame(()=>$('mirror').classList.add('lit')); }
+
+function goAngle(angle){
+  current=angle;const L=labels[angle];
+  $('gK').textContent=L.k;$('gT').textContent=L.t;$('exp').textContent=L.exp;
+  document.querySelectorAll('#pips .pip').forEach((p,i)=>{p.className='pip'+(captured[order[i]]?' done':'')+(order[i]===angle&&!captured[order[i]]?' on':'');});
+  $('turnR').className='turn right'+(L.arrow==='right'?' show':'');
+  $('turnL').className='turn left'+(L.arrow==='left'?' show':'');
+  $('slotSideLbl').textContent=angle==='frontal'?'perfiles':'frontal';
+  paintSlot('slotFront',captured.frontal);paintSlot('slotSide',captured.perfil_d||captured.perfil_i);
+  $('frozen').style.display='none'; if(hasCam)$('video').style.display='block';
+  reset();show('s-mirror');startLoop();
+}
+function paintSlot(id,d){const el=$(id);if(d){el.className='ph filled';el.innerHTML='<img src="'+d+'">';}else{el.className='ph';el.innerHTML='◌';}}
+function reset(){['cLuz','cEnc','cDist'].forEach(id=>$(id).className='cnd');const s=$('shutter');s.disabled=true;s.classList.remove('armed');$('mirror').classList.remove('aligned');$('coachtip').textContent='Acomodate dentro del óvalo…';$('coachtip').style.opacity=1;}
+function okc(id){$(id).classList.add('ok');}
+
+let st={luz:false,enc:false,dist:false};
+function startLoop(){
+  clearInterval(loop);st={luz:false,enc:false,dist:false};
+  if(hasCam){
+    const c=document.createElement('canvas');c.width=48;c.height=64;const x=c.getContext('2d');let hold=0;
+    loop=setInterval(()=>{try{
+      x.drawImage(video,0,0,48,64);const d=x.getImageData(0,0,48,64).data;let s=0;
+      for(let i=0;i<d.length;i+=4)s+=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
+      const luma=s/(d.length/4);
+      st.luz=luma>60&&luma<214;$('cLuz').className='cnd'+(st.luz?' ok':'');
+      hold++;st.enc=hold>4;st.dist=hold>7;
+      $('cEnc').className='cnd'+(st.enc?' ok':'');$('cDist').className='cnd'+(st.dist?' ok':'');
+      arm();
+    }catch(e){}},230);
+  }else{
+    setTimeout(()=>{st.luz=true;okc('cLuz');},600);
+    setTimeout(()=>{st.dist=true;okc('cDist');},1100);
+    setTimeout(()=>{st.enc=true;okc('cEnc');arm();},1600);
+  }
+}
+function arm(){
+  if(st.luz&&st.enc&&st.dist){$('mirror').classList.add('aligned');const s=$('shutter');if(s.disabled){s.disabled=false;s.classList.add('armed');const t=$('coachtip');t.textContent='Perfecto · tocá para capturar';setTimeout(()=>t.style.opacity=0,1700);}}
+  else{$('mirror').classList.remove('aligned');const s=$('shutter');s.disabled=true;s.classList.remove('armed');}
+}
+function capture(){
+  const f=$('flare');f.classList.remove('go');void f.offsetWidth;f.classList.add('go');
+  let d=null;
+  if(hasCam){const c=$('frozen');const vw=video.videoWidth||720,vh=video.videoHeight||960;c.width=vw;c.height=vh;c.getContext('2d').drawImage(video,0,0,vw,vh);c.style.display='block';$('video').style.display='none';d=c.toDataURL('image/jpeg',.86);}
+  captured[current]=d||'';
+  quality[current]=current==='frontal'?{l:4,a:5,d:4}:{l:4,a:4,d:4};
+  clearInterval(loop);setTimeout(renderReview,300);
+}
+function renderReview(){
+  const L=labels[current],q=quality[current];
+  $('rvBadge').textContent=L.badge;
+  $('rvImg').innerHTML=captured[current]?'<img src="'+captured[current]+'">':'<div class="fb serif">'+L.badge+'</div>';
+  $('vLuz').textContent=q.l+'/5';$('vAng').textContent=q.a+'/5';$('vDist').textContent=q.d+'/5';
+  $('qLuz').style.width='0';$('qAng').style.width='0';$('qDist').style.width='0';
+  requestAnimationFrame(()=>setTimeout(()=>{$('qLuz').style.width=(q.l*20)+'%';$('qAng').style.width=(q.a*20)+'%';$('qDist').style.width=(q.d*20)+'%';},80));
+  show('s-review');
+}
+function reShoot(){captured[current]=null;goAngle(current);}
+function nextAngle(){const i=order.indexOf(current);const n=order.slice(i+1).find(a=>!captured[a]);if(n)goAngle(n);else renderDone();}
+function renderDone(){
+  const w=$('doneThumbs');w.innerHTML='';
+  order.forEach(a=>{const L=labels[a],d=captured[a];const inner=d?'<img src="'+d+'">':'<div class="fb">◌</div>';
+    w.insertAdjacentHTML('beforeend','<div class="thumb"><div class="chk">✓</div>'+inner+'<div class="tl">'+L.badge.toUpperCase()+'</div></div>');});
+  show('s-done');
+}
+function stopAndGo(id){show(id);}
+function restart(){captured={};quality={};current='frontal';if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;hasCam=false;}$('mirror').classList.remove('lit','aligned');show('s-intro');}
+</script>
+</body>
+</html>
