@@ -10,45 +10,81 @@
 <style>
 :root{--cream:#F5EFE3;--cream-soft:#FAF7EF;--cream-border:#E8E0D2;--sage:#5C7C5A;--forest:#2A3A2A;--forest-soft:#5A6E5A;--clay:#B07050;--muted:#8A9A8A}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',-apple-system,sans-serif;color:var(--forest);background:radial-gradient(1100px 600px at 50% -10%,#ECE3D2,transparent),#EFE8D9;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:48px 20px 60px}
+body{font-family:'Inter',-apple-system,sans-serif;color:var(--forest);background:radial-gradient(1100px 600px at 50% -10%,#ECE3D2,transparent),#EFE8D9;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:48px 20px 64px}
 .serif{font-family:'Cormorant Garamond',serif}
-.top{text-align:center;max-width:560px;margin-bottom:34px}
+.top{text-align:center;max-width:560px;margin-bottom:30px}
 .mark{font-family:'Cormorant Garamond',serif;font-size:15px;letter-spacing:6px;color:var(--clay);font-weight:600;margin-bottom:14px}
 .top h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:38px;line-height:1.05;color:var(--forest);letter-spacing:-.5px}
 .top p{color:var(--forest-soft);font-size:14px;margin-top:12px;line-height:1.6}
-.grid{display:flex;flex-direction:column;gap:16px;width:100%;max-width:420px}
-.pc{background:#fff;border:1px solid var(--cream-border);border-radius:22px;padding:22px;text-decoration:none;color:inherit;display:block;transition:transform .15s,box-shadow .2s;box-shadow:0 18px 40px -26px rgba(42,58,42,.35)}
-.pc:hover{transform:translateY(-2px);box-shadow:0 24px 50px -26px rgba(42,58,42,.45)}
-.pc .k{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--clay);font-weight:600}
-.pc h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;color:var(--forest);margin:8px 0 6px}
-.pc p{font-size:12.5px;color:var(--forest-soft);line-height:1.55}
-.pc .go{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--sage)}
-.pc .note{margin-top:10px;font-size:10.5px;color:var(--muted)}
-.foot{margin-top:34px;font-size:11px;color:var(--muted);text-align:center;max-width:420px;line-height:1.6}
+.wrap{width:100%;max-width:440px}
+.grouph{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;margin:26px 6px 12px;display:flex;align-items:center;gap:10px}
+.grouph::after{content:"";flex:1;height:1px;background:var(--cream-border)}
+.grid{display:flex;flex-direction:column;gap:14px}
+.pc{background:#fff;border:1px solid var(--cream-border);border-radius:20px;padding:20px;text-decoration:none;color:inherit;display:block;transition:transform .15s,box-shadow .2s;box-shadow:0 16px 36px -26px rgba(42,58,42,.35)}
+.pc:hover{transform:translateY(-2px);box-shadow:0 22px 46px -26px rgba(42,58,42,.45)}
+.pc .k{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--clay);font-weight:600}
+.pc h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;color:var(--forest);margin:7px 0 5px}
+.pc p{font-size:12px;color:var(--forest-soft);line-height:1.5}
+.pc .go{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--sage)}
+.pc .note{margin-top:9px;font-size:10.5px;color:var(--muted)}
+.pc.mini{padding:16px 18px}
+.pc.mini h2{font-size:20px;margin:5px 0 4px}
+.swatch{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:middle}
+.foot{margin-top:36px;font-size:11px;color:var(--muted);text-align:center;max-width:440px;line-height:1.6}
 </style>
 </head>
 <body>
   <div class="top">
     <div class="mark">SAVIA</div>
     <h1 class="serif">Prototipos para revisión</h1>
-    <p>Dos experiencias en desarrollo para la app de pacientes. Tocá cada una para verla en el teléfono. Son prototipos — los datos son de ejemplo.</p>
+    <p>Experiencias en desarrollo para la app de pacientes. Tocá cada una para verla en el teléfono. Son prototipos — los datos son de ejemplo.</p>
   </div>
 
-  <div class="grid">
-    <a class="pc" href="./espejo.html">
-      <div class="k">Foto inicial guiada</div>
-      <h2 class="serif">El Espejo</h2>
-      <p>El paciente se toma su foto baseline con guía tipo espejo y luz blanca, para que cada comparación futura sea justa.</p>
-      <span class="go">Abrir prototipo →</span>
-      <div class="note">Pedí permiso de cámara para verte en el espejo.</div>
-    </a>
+  <div class="wrap">
+    <div class="grouph">Features</div>
+    <div class="grid">
+      <a class="pc" href="./espejo.html">
+        <div class="k">Foto inicial guiada</div>
+        <h2 class="serif">El Espejo</h2>
+        <p>El paciente se toma su foto baseline con guía tipo espejo y luz blanca, para que cada comparación futura sea justa.</p>
+        <span class="go">Abrir prototipo →</span>
+        <div class="note">Pedí permiso de cámara para verte en el espejo.</div>
+      </a>
+      <a class="pc" href="./glow-miles-mockup.html">
+        <div class="k">Programa de fidelidad</div>
+        <h2 class="serif">Glow Miles</h2>
+        <p>Tarjeta de status premium, niveles Silver → Presidential, y canje de millas. Pensado para retener y fidelizar pacientes.</p>
+        <span class="go">Abrir prototipo →</span>
+      </a>
+    </div>
 
-    <a class="pc" href="./glow-miles-mockup.html">
-      <div class="k">Programa de fidelidad</div>
-      <h2 class="serif">Glow Miles</h2>
-      <p>Tarjeta de status premium, niveles Silver → Presidential, y canje de millas. Pensado para retener y fidelizar pacientes.</p>
-      <span class="go">Abrir prototipo →</span>
-    </a>
+    <div class="grouph">Rediseño de la home · 4 direcciones</div>
+    <div class="grid">
+      <a class="pc mini" href="./home-clinica-wellness.html">
+        <div class="k"><span class="swatch" style="background:#5C7C5A"></span>Opción 1</div>
+        <h2 class="serif">Clínica & Wellness</h2>
+        <p>La más completa: fotos antes de la cita, rutina skincare, tratamientos del día, próxima cita y balance de nutrición.</p>
+        <span class="go">Abrir →</span>
+      </a>
+      <a class="pc mini" href="./home-elegante-clinico.html">
+        <div class="k"><span class="swatch" style="background:#33472F"></span>Opción 2</div>
+        <h2 class="serif">Elegante & Clínico</h2>
+        <p>Evolución premium de lo actual: tarjeta de transformación activa Rostro + Cuerpo, voz SAVIA y qué sigue hoy.</p>
+        <span class="go">Abrir →</span>
+      </a>
+      <a class="pc mini" href="./home-calido-humano.html">
+        <div class="k"><span class="swatch" style="background:#BE7A54"></span>Opción 3</div>
+        <h2 class="serif">Cálido & Humano</h2>
+        <p>Paleta cálida y tono emocional. Resumen del día, próximos pasos y un SAVIA más cercano.</p>
+        <span class="go">Abrir →</span>
+      </a>
+      <a class="pc mini" href="./home-moderno-premium.html">
+        <div class="k"><span class="swatch" style="background:#0c110d;border:1px solid #8CE879"></span>Opción 4</div>
+        <h2 class="serif">Moderno & Premium</h2>
+        <p>Fondo oscuro con acentos neón, before/after del rostro y SAVIA con glow. La más impactante.</p>
+        <span class="go">Abrir →</span>
+      </a>
+    </div>
   </div>
 
   <div class="foot">Prototipos de producto · SAVIA · uso interno para revisión con la clínica.</div>

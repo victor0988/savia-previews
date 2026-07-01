@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SAVIA · Home — Elegante & Clínico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F5EFE3;--cream-soft:#FAF7EF;--cream-border:#E8E0D2;--sage:#5C7C5A;--sage-l:#7BA77F;--forest:#2A3A2A;--forest-s:#5A6E5A;--clay:#B07050;--gold:#C7B071;--muted:#8A9A8A;--hero-a:#33472F;--hero-b:#20301F}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',-apple-system,sans-serif;color:var(--forest);background:radial-gradient(1100px 620px at 50% -10%,#ECE3D2,transparent),#EFE8D9;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:26px 16px 50px}
+.serif{font-family:'Cormorant Garamond',serif}
+.lede{text-align:center;max-width:540px;margin-bottom:18px}
+.lede h1{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:27px;color:var(--forest)}
+.lede p{color:var(--forest-s);font-size:12px;margin-top:5px}
+.phone{width:392px;max-width:100%;height:812px;border-radius:52px;background:#0B0E0B;padding:10px;position:relative;box-shadow:0 55px 110px -38px rgba(20,28,18,.6),0 0 0 1px rgba(0,0,0,.05),inset 0 0 0 2px #1b1f1b}
+.screen{position:relative;width:100%;height:100%;border-radius:43px;overflow:hidden;background:var(--cream)}
+.dyn{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:104px;height:29px;background:#000;border-radius:18px;z-index:90}
+.scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding-bottom:90px}
+.scroll::-webkit-scrollbar{display:none}
+.status{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;font-size:13px;font-weight:600}
+.status .r{font-size:11px}
+.head{padding:2px 20px 6px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:9px}
+.brand .lg{width:30px;height:30px;border-radius:9px;background:var(--forest);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:15px}
+.brand .n{font-size:13px;font-weight:600}
+.head .rt{display:flex;gap:9px;align-items:center}
+.ic-btn{width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--cream-border);display:flex;align-items:center;justify-content:center;color:var(--forest-s);font-size:15px;position:relative}
+.ic-btn .dot{position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--clay)}
+.greet{padding:8px 20px 2px;display:flex;align-items:flex-start;justify-content:space-between}
+.greet h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:32px;letter-spacing:-.5px}
+.greet p{font-size:12.5px;color:var(--forest-s);margin-top:2px}
+.tag{margin:10px 20px 0;display:inline-flex;align-items:center;gap:7px;background:rgba(92,124,90,.12);border:1px solid rgba(92,124,90,.25);border-radius:999px;padding:6px 12px;font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--sage)}
+.tag .d{width:6px;height:6px;border-radius:50%;background:var(--sage)}
+/* hero */
+.hero{margin:12px 18px 0;background:linear-gradient(158deg,var(--hero-a),var(--hero-b));border-radius:22px;padding:16px;color:#fff;box-shadow:0 24px 46px -22px rgba(30,46,32,.7)}
+.hero .hd{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.hero .hd .lk{color:rgba(255,255,255,.8);text-transform:none;letter-spacing:0;font-size:11px}
+.hero .cols{display:flex;gap:14px;margin-top:12px}
+.hcol{flex:1}
+.hcol .k{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:700}
+.hcol .gs{font-size:11px;color:rgba(255,255,255,.7);margin-top:6px}
+.hcol .big{font-size:34px;font-weight:600;letter-spacing:-1px;line-height:1;font-family:'Cormorant Garamond',serif}
+.hcol .big small{font-size:15px;font-weight:500;font-family:'Inter',sans-serif;color:rgba(255,255,255,.7)}
+.hcol .dl{font-size:10.5px;color:var(--sage-l);margin-top:3px}
+.bars{margin-top:11px}
+.bar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bar .bl{font-size:10px;color:rgba(255,255,255,.65);width:70px}
+.bar .bt{flex:1;height:5px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.bar .bf{height:100%;border-radius:999px;background:var(--sage-l)}
+.ba{display:flex;gap:6px;margin-top:10px}
+.ba figure{flex:1;height:56px;border-radius:10px;background:linear-gradient(150deg,#4a5a48,#37452f);position:relative}
+.ba figure figcaption{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:8px;color:rgba(255,255,255,.75);letter-spacing:.5px}
+.hcol .stat{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);padding:6px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.hcol .stat b{font-weight:600}
+.hcol .stat.last{border-bottom:0}
+.hero .footline{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.14);font-size:11px;color:rgba(255,255,255,.8);display:flex;justify-content:space-between}
+/* savia card */
+.savia{margin:14px 18px 0;background:#fff;border:1px solid var(--cream-border);border-radius:20px;padding:15px;display:flex;align-items:center;gap:13px}
+.savia .orb{width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fff,rgba(123,167,127,.35));border:1.5px solid rgba(92,124,90,.4);display:flex;align-items:center;justify-content:center;color:var(--sage);font-size:22px;flex:0 0 auto}
+.savia .tx{flex:1}
+.savia .tx h4{font-size:13.5px;font-weight:700}
+.savia .tx p{font-size:11px;color:var(--forest-s);margin-top:1px;line-height:1.4}
+.savia .btns{display:flex;gap:8px;margin-top:10px}
+.savia .b1{background:var(--forest);color:var(--cream);border:none;border-radius:11px;padding:9px 13px;font-size:11.5px;font-weight:600;font-family:inherit;display:flex;align-items:center;gap:6px}
+.savia .b2{background:var(--cream-soft);border:1px solid var(--cream-border);border-radius:11px;padding:9px 13px;font-size:11.5px;font-weight:600;font-family:inherit;color:var(--forest)}
+.sec{padding:16px 20px 0}
+.sc-h{font-size:12px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between}
+.sc-h .lk{font-size:10.5px;color:var(--clay);font-weight:600;text-transform:none}
+.acts{display:flex;gap:9px;padding:12px 18px 0}
+.act{flex:1;background:#fff;border:1px solid var(--cream-border);border-radius:15px;padding:12px 8px;text-align:center}
+.act .ai{width:32px;height:32px;border-radius:10px;background:var(--cream-soft);display:flex;align-items:center;justify-content:center;font-size:15px;margin:0 auto 8px}
+.act .an{font-size:10.5px;font-weight:600;line-height:1.15}
+.act .am{font-size:9px;color:var(--forest-s);margin-top:3px}
+.stack{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px 0}
+.chip{background:#fff;border:1px solid var(--cream-border);border-radius:999px;padding:8px 13px;font-size:11px;font-weight:500;color:var(--forest)}
+.priv{text-align:center;font-size:9px;color:var(--muted);padding:18px 30px 6px}
+.nav{position:absolute;left:0;right:0;bottom:0;height:74px;background:rgba(250,247,239,.94);backdrop-filter:blur(12px);border-top:1px solid var(--cream-border);display:flex;align-items:center;justify-content:space-around;padding:0 14px 12px;z-index:20}
+.nav .item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;color:var(--muted);font-weight:500}
+.nav .item.on{color:var(--forest)}
+.nav .item .i{font-size:19px}
+.nav .fab{width:52px;height:52px;border-radius:50%;background:var(--forest);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;margin-top:-20px;box-shadow:0 12px 26px -10px rgba(42,58,42,.6)}
+.controls{margin-top:18px;font-size:11px;color:var(--muted)}
+</style></head>
+<body>
+<div class="lede"><h1 class="serif">Home · Elegante & Clínico</h1><p>Rediseño de la pantalla principal · prototipo · datos de ejemplo</p></div>
+<div class="phone"><div class="dyn"></div><div class="screen"><div class="scroll">
+  <div class="status"><span>9:41</span><span class="r">●●● 100%</span></div>
+  <div class="head"><div class="brand"><div class="lg serif">B</div><div class="n">Bombis Face</div></div><div class="rt"><div class="ic-btn">☾<span class="dot"></span></div></div></div>
+  <div class="greet"><div><h2 class="serif">Hola, Víctor</h2><p>Tu transformación integral, diseñada para vos.</p></div></div>
+  <div class="tag"><span class="d"></span>TRANSFORMACIÓN INTEGRAL</div>
+
+  <div class="hero">
+    <div class="hd">Tu transformación activa <span class="lk">Ver detalle →</span></div>
+    <div class="cols">
+      <div class="hcol">
+        <div class="k">Rostro</div>
+        <div class="gs">Glow Score</div>
+        <div class="big">82<small>/100</small></div>
+        <div class="dl">+8 desde la semana pasada</div>
+        <div class="bars">
+          <div class="bar"><span class="bl">Firmeza</span><span class="bt"><span class="bf" style="width:80%"></span></span></div>
+          <div class="bar"><span class="bl">Luminosidad</span><span class="bt"><span class="bf" style="width:85%"></span></span></div>
+          <div class="bar"><span class="bl">Textura</span><span class="bt"><span class="bf" style="width:78%"></span></span></div>
+        </div>
+        <div class="ba"><figure><figcaption>Inicio</figcaption></figure><figure style="background:linear-gradient(150deg,#5a6e54,#43542f)"><figcaption>Hoy</figcaption></figure></div>
+      </div>
+      <div class="hcol">
+        <div class="k">Cuerpo</div>
+        <div class="gs">Peso actual</div>
+        <div class="big">85.2<small> kg</small></div>
+        <div class="dl">-3.2 kg desde el inicio</div>
+        <div style="margin-top:11px">
+          <div class="stat"><span>% Grasa</span><b>-2.1% ↓</b></div>
+          <div class="stat"><span>Masa magra</span><b>+1.8 kg ↑</b></div>
+          <div class="stat last"><span>Recovery Score</span><b>76/100</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="footline"><span>2 tratamientos activos</span><span>Adherencia <b>86%</b></span></div>
+  </div>
+
+  <div class="savia">
+    <div class="orb">〜</div>
+    <div class="tx"><h4>SAVIA está acá para vos</h4><p>Hablá sobre tus síntomas, rutina, comidas o cualquier duda.</p>
+      <div class="btns"><button class="b1">🎤 Hablá con SAVIA</button><button class="b2">Escribirle</button></div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sc-h">Qué sigue hoy<span class="lk">Ver todo →</span></div></div>
+  <div class="acts">
+    <div class="act"><div class="ai">💉</div><div class="an">Aplicar dosis</div><div class="am">Hoy · 7:30</div></div>
+    <div class="act"><div class="ai">◉</div><div class="an">Subí tus fotos</div><div class="am">Recomendado</div></div>
+    <div class="act"><div class="ai">🧴</div><div class="an">Rutina skincare</div><div class="am">Noche</div></div>
+    <div class="act"><div class="ai">📅</div><div class="an">Próxima cita</div><div class="am">Lun 22 jun</div></div>
+  </div>
+
+  <div class="sec"><div class="sc-h">Tu stack activo<span class="lk">Ver todos →</span></div></div>
+  <div class="stack"><span class="chip">Bioestimulador</span><span class="chip">Botox</span><span class="chip">Tirzepatida</span><span class="chip">Nutrición</span><span class="chip">Skincare</span></div>
+
+  <div class="priv">🔒 Tu información clínica está cifrada · solo tu equipo médico la ve.</div>
+</div>
+  <div class="nav"><div class="item on"><span class="i">⌂</span>Inicio</div><div class="item"><span class="i">▤</span>Protocolos</div><div class="fab">〜</div><div class="item"><span class="i">📈</span>Progreso</div><div class="item"><span class="i">👤</span>Perfil</div></div>
+</div></div>
+<div class="controls">Prototipo · el before/after y fotos reales van en la versión final</div>
+</body></html>
