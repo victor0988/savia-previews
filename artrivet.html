@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Artrivet · Rehabilitación Animal · Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F4EFE7;--sand:#FAF6EE;--sand2:#FBF8F1;--border:#E7DECF;
+    --ink:#22312E;--ink-soft:#5E706B;--muted:#93A19B;
+    --teal:#2E6E6A;--teal-d:#234f4c;--aqua:#7FB6B0;--aqua-soft:#A8CFC9;
+    --amber:#C9863E;--amber-soft:#E0B078;--clay:#B4694E;--ok:#4E7A55;--line:#EFE7D8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{font-family:'Inter',-apple-system,sans-serif;color:var(--ink);background:var(--cream)}
+  .serif{font-family:'Cormorant Garamond',serif}
+  .eyebrow{font-size:10px;letter-spacing:1.7px;font-weight:700;text-transform:uppercase;color:var(--clay)}
+  svg.ic{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  img{display:block}
+
+  /* topbar demo */
+  .demo-top{height:56px;display:flex;align-items:center;gap:16px;padding:0 22px;background:var(--ink);color:var(--cream);position:sticky;top:0;z-index:40}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand .mk{width:32px;height:32px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
+  .brand .nm{font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:1.5px}
+  .brand .tg{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--aqua-soft);border-left:1px solid rgba(168,207,201,.35);padding-left:12px;font-weight:700}
+  .demo-top .spacer{flex:1}
+  .demo-badge{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--amber-soft);background:rgba(201,134,62,.16);border:1px solid rgba(201,134,62,.35);padding:4px 10px;border-radius:999px}
+  .toggle{display:flex;background:rgba(255,255,255,.08);border-radius:12px;padding:3px}
+  .toggle button{border:none;background:none;color:var(--aqua-soft);font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:9px;cursor:pointer}
+  .toggle button.on{background:var(--cream);color:var(--ink)}
+
+  .view{display:none}.view.show{display:block}
+
+  /* ═══════ CONSOLA ═══════ */
+  .app{display:grid;grid-template-columns:74px 1fr;height:calc(100vh - 56px)}
+  .rail{background:var(--ink);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:3px}
+  .nav{width:58px;padding:8px 0;border-radius:13px;display:flex;flex-direction:column;align-items:center;gap:5px;color:#9AAAA4;cursor:pointer;background:none;border:none;transition:.15s}
+  .nav .lbl{font-size:8.5px;font-weight:600}
+  .nav:hover{color:var(--cream)}.nav.active{color:var(--ink)}.nav.active .ico{background:var(--amber-soft)}
+  .nav .ico{width:44px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;transition:.15s}
+  .nav:hover .ico{background:rgba(255,255,255,.08)}.nav.active:hover .ico{background:var(--amber-soft)}
+  .rail .grow{flex:1}
+  .rail .me{width:38px;height:38px;border-radius:50%;background-image:url('https://placedog.net/120/120?id=32'),linear-gradient(135deg,var(--aqua),var(--teal));background-size:cover;background-position:center}
+
+  .content{overflow:hidden;display:flex;flex-direction:column}
+  .csec{flex:1;overflow:hidden}.csec:not(.show){display:none}
+  .cbar{height:56px;display:flex;align-items:center;gap:12px;padding:0 30px;border-bottom:1px solid var(--border);background:var(--sand)}
+  .cbar h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600}
+  .cbar .sub{font-size:12px;color:var(--ink-soft)}.cbar .spacer{flex:1}
+  .scroll{overflow-y:auto;padding:24px 30px 60px}
+
+  /* pacientes: lista + expediente */
+  .pat-wrap{display:grid;grid-template-columns:290px 1fr;height:100%}
+  .plist{border-right:1px solid var(--border);background:var(--sand);overflow-y:auto;padding:16px 14px 40px}
+  .search{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:9px 12px;margin-bottom:8px;color:var(--muted)}
+  .search input{border:none;outline:none;font-family:inherit;font-size:13px;width:100%;background:transparent;color:var(--ink)}
+  .count{font-size:11px;color:var(--muted);font-weight:600;margin:0 4px 14px}
+  .side-h{font-size:9.5px;letter-spacing:1.3px;font-weight:700;text-transform:uppercase;color:var(--ink-soft);margin:6px 4px 9px;display:flex;justify-content:space-between}
+  .side-h .cta{color:var(--clay)}
+  .pcard{display:flex;align-items:center;gap:11px;padding:9px;border-radius:12px;cursor:pointer;border:1px solid transparent;margin-bottom:3px}
+  .pcard:hover{background:#fff}.pcard.active{background:#fff;border-color:var(--aqua-soft);box-shadow:0 6px 16px rgba(34,49,46,.06)}
+  .pcard .av{width:40px;height:40px;border-radius:50%;flex:none;background-size:cover;background-position:center}
+  .pcard .nm{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pcard .meta{font-size:11px;color:var(--ink-soft);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pcard .nextb{margin-left:auto;flex:none;text-align:right;line-height:1.15}
+  .pcard .nextb .nx{display:block;font-size:8px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--clay)}
+  .pcard .nextb .tm{display:block;font-size:13px;font-weight:700;color:var(--amber)}
+  .pcard .time{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--amber);flex:none}
+  .divider{height:1px;background:var(--border);margin:14px 4px}
+
+  .exp{overflow-y:auto;padding:24px 32px 70px;max-width:1060px}
+  .btn{border:none;border-radius:12px;padding:11px 17px;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.14s;text-decoration:none;white-space:nowrap}
+  .btn:active{transform:scale(.98)}
+  .btn-amber{background:linear-gradient(135deg,var(--amber),var(--amber-soft));color:#3c2a12;box-shadow:0 8px 20px rgba(201,134,62,.28)}
+  .btn-teal{background:var(--teal);color:#fff}
+  .btn-ghost{background:#fff;border:1px solid var(--border);color:var(--ink)}
+  .btn-ghost:hover{box-shadow:0 6px 14px rgba(34,49,46,.06)}
+  .btn-sm{padding:9px 14px;font-size:12.5px;border-radius:11px}
+
+  .phead{display:flex;align-items:flex-start;gap:16px;margin-bottom:18px}
+  .phead .big-av{width:74px;height:74px;border-radius:22px;flex:none;background-size:cover;background-position:center;border:2px solid #fff;box-shadow:0 8px 22px rgba(34,49,46,.14)}
+  .phead h1{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;line-height:1}
+  .phead .psub{font-size:12.5px;color:var(--ink-soft);margin-top:5px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .chip{font-size:10.5px;font-weight:600;padding:4px 11px;border-radius:999px;border:1px solid rgba(46,110,106,.25);color:var(--teal);background:linear-gradient(100deg,rgba(127,182,176,.16),#FBF8F1)}
+  .chip.warn{color:var(--clay);border-color:rgba(180,105,78,.3);background:linear-gradient(100deg,rgba(180,105,78,.12),#FBF8F1)}
+  .phead .r{margin-left:auto;display:flex;gap:8px;align-items:center}
+
+  .tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin:0 0 24px;flex-wrap:wrap}
+  .tab{padding:11px 15px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;position:relative;background:none;border:none;font-family:inherit}
+  .tab.active{color:var(--ink)}.tab.active::after{content:'';position:absolute;left:12px;right:12px;bottom:-1px;height:2px;background:var(--amber);border-radius:2px}
+  .pane{display:none}.pane.show{display:block;animation:fade .3s}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+  .card{background:var(--sand);border:1px solid var(--border);border-radius:18px;padding:18px;box-shadow:0 6px 16px rgba(34,49,46,.04)}
+  .card h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600}
+  .card .lead{font-size:11.5px;color:var(--ink-soft);margin-bottom:12px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .sec-title{display:flex;align-items:baseline;gap:12px;margin:26px 0 14px}
+  .sec-title h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600}.sec-title .add{margin-left:auto}
+
+  /* briefing hero */
+  .hero{background:linear-gradient(150deg,#23514d,#2e6e6a 55%,#3a827c);color:#eefaf7;border-radius:22px;padding:24px 26px;position:relative;overflow:hidden;box-shadow:0 18px 44px rgba(34,49,46,.22);margin-bottom:18px}
+  .hero::after{content:'';position:absolute;right:-60px;top:-70px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(168,207,201,.28),transparent 68%)}
+  .hero .k{font-size:10px;letter-spacing:1.6px;font-weight:700;text-transform:uppercase;color:var(--aqua-soft);position:relative;z-index:1}
+  .hero h2{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:600;margin:8px 0 4px;position:relative;z-index:1}
+  .hero .lede{font-size:14px;line-height:1.6;color:#d6ede9;max-width:640px;position:relative;z-index:1}
+  .hero .lede b{color:#fff}
+  .hero .cta-row{display:flex;gap:10px;margin-top:18px;position:relative;z-index:1;flex-wrap:wrap}
+  .hero .btn-rec{background:#fff;color:var(--ink)}
+  .hero .btn-rec .rd{width:9px;height:9px;border-radius:50%;background:var(--clay);box-shadow:0 0 0 0 rgba(180,105,78,.5);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(180,105,78,.5)}70%{box-shadow:0 0 0 8px rgba(180,105,78,0)}100%{box-shadow:0 0 0 0 rgba(180,105,78,0)}}
+  .att{display:flex;gap:11px;align-items:flex-start;background:var(--sand);border:1px solid var(--border);border-radius:14px;padding:13px 15px;margin-bottom:9px}
+  .att .dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex:none}
+  .att.warn .dot{background:var(--clay)}.att.info .dot{background:var(--amber)}.att.ok .dot{background:var(--ok)}
+  .att .t{font-size:13.5px;font-weight:600}.att .s{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.45}
+  .att-photos{display:flex;gap:6px;margin-top:10px}
+  .att-photos .ap{width:52px;height:52px;border-radius:9px;border:1px solid var(--border);background-size:cover;background-position:center;position:relative}
+  .att-photos .ap span{position:absolute;bottom:3px;left:4px;font-size:8px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+  .stat{background:var(--sand);border:1px solid var(--border);border-radius:16px;padding:15px 16px}
+  .stat .lab{font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+  .stat .v{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;margin-top:5px;line-height:1}
+  .stat .v small{font-size:14px;color:var(--ink-soft)}
+  .stat .d{font-size:11px;font-weight:700;margin-top:4px;color:var(--ok)}
+  .bar{height:7px;border-radius:5px;background:var(--border);overflow:hidden;margin-top:9px}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--aqua))}
+
+  /* terapias / plan */
+  .tcard{display:flex;gap:14px;background:var(--sand);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;align-items:center}
+  .tcard .tph{width:88px;height:88px;border-radius:13px;flex:none;background-size:cover;background-position:center;border:1px solid var(--border)}
+  .tcard .ti{flex:1;min-width:0}
+  .pill{font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(46,110,106,.12);color:var(--teal)}
+  .pill.amber{background:rgba(201,134,62,.14);color:#8a5a1e}
+  .tcard h4{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;margin:7px 0 2px}
+  .tcard .ts{font-size:12px;color:var(--ink-soft);line-height:1.5}
+  .tcard .tprog{display:flex;align-items:center;gap:8px;margin-top:9px}
+  .tcard .tprog .b{flex:1;height:6px;border-radius:5px;background:var(--border);overflow:hidden}
+  .tcard .tprog .b i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--aqua))}
+  .tcard .tprog .l{font-size:11px;font-weight:700;color:var(--ink-soft)}
+
+  /* progreso */
+  .stream{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px}
+  .day{flex:none;width:70px;cursor:pointer}
+  .day .img{width:70px;height:84px;border-radius:12px;border:1px solid var(--border);background-size:cover;background-position:center}
+  .day.sel .img{outline:2px solid var(--amber);outline-offset:1px}
+  .day .dl{font-size:9.5px;color:var(--ink-soft);text-align:center;margin-top:4px;font-weight:600}
+  .ba{position:relative;border-radius:16px;overflow:hidden;height:320px;border:1px solid var(--border);user-select:none;background:var(--aqua-soft)}
+  .ba .layer{position:absolute;inset:0;background-size:cover;background-position:center}
+  .ba .before{clip-path:inset(0 50% 0 0);filter:grayscale(.25) brightness(.9)}
+  .ba .after{filter:saturate(1.12) brightness(1.05)}
+  .ba .tag{position:absolute;top:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:rgba(34,49,46,.82);color:#fff;padding:4px 10px;border-radius:7px;z-index:2}
+  .ba .tag.l{left:12px}.ba .tag.r{right:12px}
+  .ba .handle{position:absolute;top:0;bottom:0;width:2px;background:#fff;left:50%;z-index:2}
+  .ba .handle::after{content:'⇔';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+  .ba input[type=range]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;z-index:3}
+  .videocard{position:relative;height:200px;border-radius:16px;overflow:hidden;border:1px solid var(--border);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center}
+  .videocard::before{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(34,49,46,.5),transparent 60%)}
+  .videocard .play{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:22px;z-index:1;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+  .videocard .cap{position:absolute;left:14px;bottom:12px;color:#fff;z-index:1}
+  .videocard .cap b{font-family:'Cormorant Garamond',serif;font-size:17px;display:block}
+  .videocard .cap span{font-size:11px;opacity:.85}
+  .chart{width:100%;height:120px}.chart .gl{stroke:var(--border);stroke-width:1}.chart .ln{fill:none;stroke:var(--teal);stroke-width:2.5}.chart .ar{fill:rgba(46,110,106,.1)}.chart .dt{fill:var(--teal)}
+
+  /* historia */
+  .hc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .hc{background:var(--sand);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .hc .hh{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+  .hc .hh .ci{width:30px;height:30px;border-radius:9px;background:rgba(46,110,106,.1);color:var(--teal);display:flex;align-items:center;justify-content:center}
+  .hc .hh h4{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600}
+  .hc .f{margin-bottom:10px}.hc .f:last-child{margin:0}
+  .hc .f .k{font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .hc .f .v{font-size:13.5px;color:#2b3a36;margin-top:2px;font-weight:500}
+  .tg{font-size:10px;font-weight:700;text-transform:uppercase;padding:3px 8px;border-radius:6px}
+  .tg.ok{color:var(--ok);background:rgba(78,122,85,.14)}.tg.due{color:var(--clay);background:rgba(180,105,78,.13)}
+  .change{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}.change:last-child{border:none}
+  .change .cd{font-size:11px;color:var(--muted);font-weight:700;width:56px;flex:none;padding-top:2px}
+  .change .cb{font-size:13px;color:#2b3a36;line-height:1.5}
+
+  /* acta */
+  .acta{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px 24px;box-shadow:0 10px 26px rgba(34,49,46,.06)}
+  .acta-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:4px}
+  .acta-top .ai{width:34px;height:34px;border-radius:10px;flex:none;background:linear-gradient(135deg,var(--teal),var(--aqua));color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .acta h2{font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600}
+  .acta .byline{font-size:11px;color:var(--muted);margin-top:2px}
+  .badge-ai{font-size:9.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:#8a5a1e;background:rgba(201,134,62,.14);border:1px solid rgba(201,134,62,.3);padding:3px 8px;border-radius:6px;margin-left:auto}
+  .acta section{padding:14px 0;border-bottom:1px solid var(--line)}.acta section:last-of-type{border:none}
+  .acta .lab{font-size:10px;letter-spacing:1.1px;font-weight:700;text-transform:uppercase;color:var(--clay);margin-bottom:6px}
+  .acta p,.acta li{font-size:13.5px;line-height:1.6;color:#2b3a36}.acta ul{margin:0;padding-left:18px}
+  .acta-photos{display:flex;gap:9px;margin-top:6px;flex-wrap:wrap}
+  .acta-photos .ph{width:84px;height:84px;border-radius:11px;border:1px solid var(--border);background-size:cover;background-position:center}
+  .acta-actions{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+  .acta-note{font-size:11.5px;color:var(--ink-soft);background:var(--sand2);border:1px dashed var(--border);border-radius:12px;padding:11px 13px;margin-top:14px;line-height:1.5}
+  .past{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--sand);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;cursor:pointer}
+  .past:hover{border-color:var(--aqua-soft)}
+  .past .dt{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;width:78px;flex:none}
+  .past .ttl{font-size:13px;font-weight:600;flex:1}.past .st{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--ok)}
+
+  /* tablas / analytics */
+  .kpibar{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .an{background:var(--sand);border:1px solid var(--border);border-radius:16px;padding:15px 16px}
+  .an .lab{font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+  .an .v{font-family:'Cormorant Garamond',serif;font-size:29px;font-weight:600;margin-top:4px}
+  .an .v small{font-size:13px;color:var(--ink-soft)}
+  .an .dd{font-size:11px;font-weight:700;margin-top:3px;color:var(--ok)}.an .dd.dn{color:var(--clay)}
+  .table{width:100%;border-collapse:collapse;background:var(--sand);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+  .table th{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:left;padding:13px 18px;border-bottom:1px solid var(--border)}
+  .table td{font-size:13px;padding:14px 18px;border-bottom:1px solid var(--line)}.table tr:last-child td{border:none}
+  .table td.num{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;text-align:right}
+  .table .pet{display:flex;align-items:center;gap:9px}.table .pet .a{width:28px;height:28px;border-radius:50%;background-size:cover;background-position:center;flex:none}
+  .inv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .prod{background:var(--sand);border:1px solid var(--border);border-radius:18px;padding:16px}
+  .prod .ph{height:104px;border-radius:13px;margin-bottom:12px;background-size:cover;background-position:center;position:relative}
+  .prod .cat{position:absolute;top:8px;left:8px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;background:rgba(34,49,46,.75);color:#fff;padding:3px 8px;border-radius:6px}
+  .prod h4{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600}
+  .prod .subx{font-size:11px;color:var(--ink-soft);margin-top:2px}
+  .prod .gauge{display:flex;align-items:baseline;gap:6px;margin-top:12px}
+  .prod .gauge .n{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600}.prod .gauge .u{font-size:11px;color:var(--ink-soft);font-weight:600}.prod .gauge .tg{margin-left:auto}
+  .prod .sb{height:6px;border-radius:5px;background:var(--border);overflow:hidden;margin-top:9px}.prod .sb i{display:block;height:100%}
+  .prod .foot{font-size:10.5px;color:var(--muted);margin-top:9px;display:flex;justify-content:space-between}
+  /* agenda */
+  .cal{background:var(--sand);border:1px solid var(--border);border-radius:18px;padding:18px}
+  .cal-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}.cal-head h3{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;text-transform:capitalize}
+  .cal-legend{margin-left:auto;display:flex;gap:13px;font-size:11px;color:var(--ink-soft)}.cal-legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cal-dow{text-align:center;font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);padding-bottom:3px}
+  .cal-cell{aspect-ratio:1/1;border-radius:11px;background:#fff;padding:6px 7px;position:relative;overflow:hidden;border:1px solid transparent}
+  .cal-cell.empty{background:transparent}.cal-cell .d{font-size:12px;font-weight:600;color:var(--ink-soft)}
+  .cal-cell.today{border-color:var(--amber)}.cal-cell.today .d{color:var(--amber);font-weight:800}
+  .cal-ev{font-size:9px;font-weight:600;padding:2px 5px;border-radius:5px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ev-teal{background:rgba(46,110,106,.16);color:var(--teal)}.ev-amber{background:rgba(201,134,62,.18);color:#8a5a1e}.ev-clay{background:rgba(180,105,78,.15);color:var(--clay)}
+
+  /* ═══════ APP DUEÑO (mobile) ═══════ */
+  .owner{display:flex;justify-content:center;padding:34px 20px;min-height:calc(100vh - 56px);background:
+    radial-gradient(circle at 85% 0%,rgba(127,182,176,.18),transparent 45%),
+    radial-gradient(circle at 0% 100%,rgba(201,134,62,.12),transparent 45%),var(--cream)}
+  .phone{width:400px;max-width:100%;background:var(--cream);border-radius:34px;border:1px solid var(--border);box-shadow:0 34px 80px rgba(34,49,46,.2);overflow:hidden}
+  .ph-scroll{max-height:80vh;overflow-y:auto;padding:0 18px 40px}
+  .ph-top{display:flex;align-items:center;gap:8px;padding:16px 4px 12px;position:sticky;top:0;background:var(--cream);z-index:2}
+  .ph-top .cl{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,var(--aqua),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:12px}
+  .ph-top .cn{font-size:11px;font-weight:600;color:var(--ink-soft);letter-spacing:.3px}
+  .ph-top .cn2{margin-left:auto;font-size:9.5px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;color:var(--clay)}
+  .o-hero{border-radius:24px;overflow:hidden;position:relative;height:280px;background-size:cover;background-position:center;margin-bottom:16px}
+  .o-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(34,49,46,.78),transparent 55%)}
+  .o-hero .in{position:absolute;left:18px;right:18px;bottom:16px;color:#fff;z-index:1}
+  .o-hero .eyebrow{color:var(--aqua-soft)}
+  .o-hero h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;line-height:1;margin:6px 0 2px}
+  .o-hero .sm{font-size:12.5px;color:#e6efec}
+  .o-score{position:absolute;top:16px;right:16px;z-index:1;text-align:center;background:rgba(255,255,255,.92);border-radius:16px;padding:8px 12px}
+  .o-score .n{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--teal);line-height:1}
+  .o-score .l{font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-soft)}
+  .o-card{background:var(--sand);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:14px}
+  .o-card .oh{display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
+  .o-card .oh h3{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600}
+  .o-card .oh .eyebrow{margin-left:auto}
+  .exrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}.exrow:last-child{border:none}
+  .exrow .ck{width:22px;height:22px;border-radius:7px;border:2px solid var(--aqua-soft);flex:none;display:flex;align-items:center;justify-content:center;color:var(--teal);font-size:12px}
+  .exrow.done .ck{background:var(--teal);border-color:var(--teal);color:#fff}
+  .exrow .ex{flex:1}.exrow .ex .t{font-size:13.5px;font-weight:600}.exrow.done .ex .t{text-decoration:line-through;color:var(--muted)}
+  .exrow .ex .s{font-size:11px;color:var(--ink-soft)}
+  .exrow .th{width:44px;height:44px;border-radius:10px;background-size:cover;background-position:center;flex:none}
+  .o-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+  .o-strip .s{flex:none;width:78px}.o-strip .s .img{width:78px;height:96px;border-radius:12px;background-size:cover;background-position:center;border:1px solid var(--border)}
+  .o-strip .s .dl{font-size:9.5px;color:var(--ink-soft);text-align:center;margin-top:4px;font-weight:600}
+  .vetnote{display:flex;gap:12px;align-items:flex-start}
+  .vetnote .va{width:44px;height:44px;border-radius:50%;background-size:cover;background-position:center;flex:none;border:2px solid #fff}
+  .vetnote .vt{font-size:13px;line-height:1.55;color:#2b3a36}.vetnote .vs{font-size:11px;color:var(--clay);font-weight:700;margin-top:6px;text-transform:uppercase;letter-spacing:.4px}
+  .appt-row{display:flex;align-items:center;gap:12px}
+  .appt-row .dt{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--teal),var(--aqua));color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
+  .appt-row .dt b{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1}.appt-row .dt span{font-size:8px;text-transform:uppercase;letter-spacing:.5px}
+  .ph-shell{display:flex;flex-direction:column;height:82vh}
+  .ph-body{flex:1;overflow-y:auto;padding:0 18px 24px}
+  .ph-tabs{display:flex;border-top:1px solid var(--border);background:#fff}
+  .ph-tabs button{flex:1;border:none;background:none;font-family:inherit;cursor:pointer;padding:11px 0 13px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted);font-size:9.5px;font-weight:700;letter-spacing:.3px}
+  .ph-tabs button .ti{font-size:17px;line-height:1}
+  .ph-tabs button.on{color:var(--teal)}
+  .oscreen{display:none;animation:fade .3s}.oscreen.show{display:block}
+  .ph-top .cl{background:#fff !important;border:1px solid var(--border)}
+  /* agendar */
+  .bk-h{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin:6px 0 2px}
+  .bk-sub{font-size:12px;color:var(--ink-soft);margin-bottom:16px}
+  .ther-pick{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px}
+  .ther{flex:none;width:120px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--sand);cursor:pointer}
+  .ther.sel{border-color:var(--teal);box-shadow:0 6px 16px rgba(46,110,106,.14)}
+  .ther .im{height:70px;background-size:cover;background-position:center}
+  .ther .tx{padding:8px 9px;font-size:11.5px;font-weight:600;line-height:1.25}
+  .ther .tx small{display:block;color:var(--ink-soft);font-weight:500;font-size:10px;margin-top:1px}
+  .daypick{display:flex;gap:7px;overflow-x:auto;margin-bottom:16px}
+  .dp{flex:none;width:52px;text-align:center;border:1px solid var(--border);border-radius:12px;padding:8px 0;cursor:pointer;background:#fff}
+  .dp.sel{background:var(--teal);border-color:var(--teal);color:#fff}
+  .dp .dw{font-size:9px;text-transform:uppercase;font-weight:700;letter-spacing:.4px;color:var(--muted)}.dp.sel .dw{color:rgba(255,255,255,.8)}
+  .dp .dn{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600}
+  .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+  .slot{border:1px solid var(--border);border-radius:11px;padding:11px 0;text-align:center;font-size:13px;font-weight:600;cursor:pointer;background:#fff}
+  .slot.sel{background:var(--amber);border-color:var(--amber);color:#3c2a12}
+  .slot.off{opacity:.4;text-decoration:line-through;cursor:not-allowed}
+  /* club lealtad */
+  .loy-hero{border-radius:22px;padding:22px;color:#fff;background:linear-gradient(140deg,#C9863E,#E0B078);position:relative;overflow:hidden;margin-bottom:16px}
+  .loy-hero::after{content:'🐾';position:absolute;right:-6px;bottom:-14px;font-size:90px;opacity:.18}
+  .loy-hero .lb{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;opacity:.9}
+  .loy-hero .pts{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:600;line-height:1;margin:4px 0}
+  .loy-hero .pts small{font-size:16px}
+  .loy-hero .nx{font-size:12px;opacity:.95;margin-top:2px}
+  .loy-bar{height:8px;border-radius:6px;background:rgba(255,255,255,.3);overflow:hidden;margin-top:12px}.loy-bar i{display:block;height:100%;background:#fff}
+  .reward{display:flex;align-items:center;gap:12px;background:var(--sand);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+  .reward .ri{width:44px;height:44px;border-radius:12px;background:rgba(201,134,62,.14);color:var(--amber);display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+  .reward .rt{flex:1}.reward .rt .t{font-size:13.5px;font-weight:600}.reward .rt .s{font-size:11px;color:var(--ink-soft)}
+  .reward .rc{font-size:12px;font-weight:700;color:var(--amber)}
+  .reward.locked{opacity:.6}.reward.locked .rc{color:var(--muted)}
+  .earn{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px}.earn:last-child{border:none}
+  .earn .e{width:26px;height:26px;border-radius:8px;background:rgba(46,110,106,.1);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+  .earn b{margin-left:auto;color:var(--teal);font-weight:700}
+  .badges{display:flex;gap:10px;flex-wrap:wrap}
+  .bdg{width:64px;text-align:center}.bdg .bi{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--aqua),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 5px}
+  .bdg.lock .bi{background:var(--border);color:var(--muted)}
+  .bdg span{font-size:9px;font-weight:600;color:var(--ink-soft);line-height:1.2;display:block}
+  .doc{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}.doc:last-child{border:none}
+  .doc .di{width:34px;height:34px;border-radius:10px;background:rgba(46,110,106,.1);color:var(--teal);display:flex;align-items:center;justify-content:center;flex:none}
+  .doc .dt2{flex:1;font-size:13px;font-weight:600}.doc .dt2 small{display:block;color:var(--ink-soft);font-weight:500;font-size:11px}
+
+  /* overlays */
+  .overlay{position:fixed;inset:0;background:rgba(20,32,29,.55);backdrop-filter:blur(4px);z-index:60;display:none;align-items:center;justify-content:center;padding:24px}
+  .overlay.show{display:flex}
+  .modal{width:min(520px,94vw);background:var(--cream);border-radius:22px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.35);text-align:center}
+  .wave{display:flex;align-items:center;justify-content:center;gap:4px;height:56px;margin:16px 0 4px}
+  .wave span{width:4px;border-radius:3px;background:var(--teal);animation:w 1s ease-in-out infinite}@keyframes w{0%,100%{height:12px}50%{height:46px}}
+  .rec-badge{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;color:var(--clay);text-transform:uppercase;letter-spacing:1px}
+  .rec-badge .rd{width:10px;height:10px;border-radius:50%;background:var(--clay);animation:pulse 1.6s infinite}
+  .rec-timer{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:600;margin:2px 0}
+  .rec-cap{font-size:13px;color:var(--ink-soft);line-height:1.5;max-width:370px;margin:0 auto 18px}
+  .modal-actions{display:flex;gap:10px;justify-content:center}.modal h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:4px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:12px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:80;box-shadow:0 12px 28px rgba(34,49,46,.28);display:none}.toast.show{display:block}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="demo-top">
+  <div class="brand"><div class="mk"><svg viewBox="0 0 100 100" style="width:74%;height:74%"><defs><linearGradient id="lgA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DE8A2E"/><stop offset="1" stop-color="#F4C874"/></linearGradient></defs><path d="M30 28 L49 66 44 66 25 28 Z" fill="#DE8A2E"/><path d="M70 28 L51 66 56 66 75 28 Z" fill="url(#lgA)"/><path d="M28 55 A 30 30 0 0 1 72 55" fill="none" stroke="url(#lgA)" stroke-width="9" stroke-linecap="round"/></svg></div><div class="nm">ARTRIVET</div><div class="tg">Rehabilitación Animal</div></div>
+  <div class="spacer"></div>
+  <span class="demo-badge">Demo · datos ficticios</span>
+  <div class="toggle"><button class="on" id="tgConsole" onclick="setView('console')">Consola clínica</button><button id="tgOwner" onclick="setView('owner')">App del dueño</button></div>
+</div>
+
+<!-- ═══════════ CONSOLA ═══════════ -->
+<div class="view show" id="viewConsole">
+  <div class="app">
+    <nav class="rail">
+      <button class="nav" onclick="csec(this,'s-dash')"><span class="ico"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg></span><span class="lbl">Dashboard</span></button>
+      <button class="nav active" onclick="csec(this,'s-pac')"><span class="ico"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20c0-3 3-5 8-5s8 2 8 5"/><circle cx="12" cy="8" r="4"/></svg></span><span class="lbl">Pacientes</span></button>
+      <button class="nav" onclick="csec(this,'s-ag')"><span class="ico"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg></span><span class="lbl">Agenda</span></button>
+      <button class="nav" onclick="csec(this,'s-ter')"><span class="ico"><svg class="ic" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></span><span class="lbl">Terapias</span></button>
+      <button class="nav" onclick="csec(this,'s-fac')"><span class="ico"><svg class="ic" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9.5 8h5M9.5 12h5"/></svg></span><span class="lbl">Facturas</span></button>
+      <button class="nav" onclick="csec(this,'s-inv')"><span class="ico"><svg class="ic" viewBox="0 0 24 24"><path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></svg></span><span class="lbl">Inventario</span></button>
+      <button class="nav" onclick="csec(this,'s-an')"><span class="ico"><svg class="ic" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg></span><span class="lbl">Analytics</span></button>
+      <div class="grow"></div>
+      <div class="me"></div>
+    </nav>
+
+    <div class="content">
+      <!-- Pacientes -->
+      <section class="csec show" id="s-pac">
+        <div class="pat-wrap">
+          <aside class="plist">
+            <div class="search"><svg class="ic" viewBox="0 0 24 24" style="width:16px;height:16px"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg><input placeholder="Buscar paciente…"></div>
+            <div class="count">128 pacientes en rehabilitación · 9 sesiones hoy</div>
+            <div class="side-h">Sesiones de hoy <span class="cta">9</span></div>
+            <div id="petList"></div>
+            <div class="divider"></div>
+            <div class="side-h">Recientes <span class="cta">Ver todos</span></div>
+            <div id="petRecent"></div>
+          </aside>
+          <div class="exp" id="exp"></div>
+        </div>
+      </section>
+
+      <!-- Dashboard -->
+      <section class="csec" id="s-dash">
+        <div class="cbar"><h1 class="serif">Dashboard</h1><span class="sub">Artrivet · San José · Dra. Lily Mora</span></div>
+        <div class="scroll" style="max-width:1100px">
+          <div class="kpibar">
+            <div class="an"><div class="lab">Pacientes en rehab</div><div class="v">128</div><div class="dd">▲ 11 este mes</div></div>
+            <div class="an"><div class="lab">Sesiones hoy</div><div class="v">9</div><div class="dd">3 en caminadora de agua</div></div>
+            <div class="an"><div class="lab">Ocupación caminadora</div><div class="v">82<small>%</small></div><div class="dd">2 turnos libres</div></div>
+            <div class="an"><div class="lab">Alta esta semana</div><div class="v">4</div><div class="dd">recuperación completa</div></div>
+          </div>
+          <div class="grid2">
+            <div class="card"><h3 class="serif">Próximas sesiones</h3><div class="lead">Hoy</div>
+              <div class="change"><div class="cd">09:00</div><div class="cb"><b>Max</b> · hidroterapia + láser · post-TPLO</div></div>
+              <div class="change"><div class="cd">10:30</div><div class="cb"><b>Luna</b> · acupuntura · dolor lumbar</div></div>
+              <div class="change"><div class="cd">11:15</div><div class="cb"><b>Rocco</b> · ejercicio terapéutico · displasia</div></div>
+              <div class="change"><div class="cd">13:00</div><div class="cb"><b>Nina</b> · caminadora de agua · neuro (IVDD)</div></div>
+            </div>
+            <div class="card"><h3 class="serif">Atención de SAVIA</h3><div class="lead">Señales de los pacientes en casa</div>
+              <div class="att warn"><span class="dot"></span><div><div class="t">Rocco: menos apoyo en pata trasera</div><div class="s">El dueño reportó cojera leve tras el paseo. Revisar en la sesión.</div></div></div>
+              <div class="att ok"><span class="dot"></span><div><div class="t">Max: movilidad en aumento</div><div class="s">Videos en casa muestran mejor rango de flexión. Va adelantado.</div></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Agenda -->
+      <section class="csec" id="s-ag">
+        <div class="cbar"><h1 class="serif">Agenda</h1><span class="sub">Julio 2026 · caminadora de agua, láser, acupuntura</span></div>
+        <div class="scroll" style="max-width:1000px">
+          <div class="cal"><div class="cal-head"><h3 class="serif">julio 2026</h3><div class="cal-legend"><span><i style="background:var(--teal)"></i>Hidroterapia</span><span><i style="background:var(--amber)"></i>Consulta</span><span><i style="background:var(--clay)"></i>Control</span></div></div><div class="cal-grid" id="calGrid"></div></div>
+        </div>
+      </section>
+
+      <!-- Terapias -->
+      <section class="csec" id="s-ter">
+        <div class="cbar"><h1 class="serif">Terapias</h1><span class="sub">Catálogo de rehabilitación</span></div>
+        <div class="scroll" style="max-width:1000px" id="terBody"></div>
+      </section>
+
+      <!-- Facturas -->
+      <section class="csec" id="s-fac">
+        <div class="cbar"><h1 class="serif">Facturas</h1><span class="sub">Julio 2026</span></div>
+        <div class="scroll" style="max-width:1050px">
+          <div class="kpibar">
+            <div class="an"><div class="lab">Ingresos del mes</div><div class="v">₡9.4<small>M</small></div><div class="dd">▲ 14%</div></div>
+            <div class="an"><div class="lab">Por cobrar</div><div class="v">₡820<small>K</small></div><div class="dd dn">7 facturas</div></div>
+            <div class="an"><div class="lab">Sesiones facturadas</div><div class="v">312</div></div>
+            <div class="an"><div class="lab">Paquetes de rehab activos</div><div class="v">41</div></div>
+          </div>
+          <table class="table" id="facTable"></table>
+        </div>
+      </section>
+
+      <!-- Inventario -->
+      <section class="csec" id="s-inv">
+        <div class="cbar"><h1 class="serif">Inventario</h1><span class="sub">insumos y equipo</span></div>
+        <div class="scroll" style="max-width:1100px"><div class="inv-grid" id="invGrid"></div></div>
+      </section>
+
+      <!-- Analytics -->
+      <section class="csec" id="s-an">
+        <div class="cbar"><h1 class="serif">Analytics</h1><span class="sub">recuperación y ocupación</span></div>
+        <div class="scroll" style="max-width:1000px">
+          <div class="grid2">
+            <div class="card"><h3 class="serif">Tiempo medio de recuperación</h3><div class="lead">post-quirúrgico ortopédico · semanas</div>
+              <svg class="chart" viewBox="0 0 300 120" preserveAspectRatio="none"><line class="gl" x1="0" y1="30" x2="300" y2="30"/><line class="gl" x1="0" y1="60" x2="300" y2="60"/><line class="gl" x1="0" y1="90" x2="300" y2="90"/><path class="ar" d="M0,40 L75,52 L150,64 L225,74 L300,84 L300,120 L0,120 Z"/><polyline class="ln" points="0,40 75,52 150,64 225,74 300,84"/><circle class="dt" cx="0" cy="40" r="3.5"/><circle class="dt" cx="300" cy="84" r="4.5"/></svg>
+              <div style="font-size:11px;color:var(--muted);margin-top:8px">De 14 → 9 semanas con el plan de hidroterapia temprana.</div></div>
+            <div class="card"><h3 class="serif">Ocupación caminadora de agua</h3><div class="lead">últimas 8 semanas</div>
+              <svg class="chart" viewBox="0 0 300 120" preserveAspectRatio="none"><line class="gl" x1="0" y1="30" x2="300" y2="30"/><line class="gl" x1="0" y1="60" x2="300" y2="60"/><line class="gl" x1="0" y1="90" x2="300" y2="90"/><polyline class="ln" points="0,72 43,64 86,58 129,50 172,44 215,40 258,34 300,30"/></svg>
+              <div style="font-size:11px;color:var(--muted);margin-top:8px">Demanda creciente — evaluar segundo turno.</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ APP DUEÑO ═══════════ -->
+<div class="view" id="viewOwner">
+  <div class="owner">
+    <div class="phone"><div class="ph-shell">
+      <div class="ph-top"><div class="cl"><svg viewBox="0 0 100 100" style="width:16px;height:16px"><defs><linearGradient id="lgB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DE8A2E"/><stop offset="1" stop-color="#F4C874"/></linearGradient></defs><path d="M30 28 L49 66 44 66 25 28 Z" fill="#DE8A2E"/><path d="M70 28 L51 66 56 66 75 28 Z" fill="url(#lgB)"/><path d="M28 55 A 30 30 0 0 1 72 55" fill="none" stroke="url(#lgB)" stroke-width="9" stroke-linecap="round"/></svg></div><div class="cn">Artrivet · Rehabilitación Animal</div><div class="cn2">Familia de Max</div></div>
+      <div class="ph-body">
+
+        <!-- INICIO -->
+        <div class="oscreen show" id="o-inicio">
+          <div class="o-hero" style="margin-top:16px;background-image:url('https://placedog.net/700/560?id=15'),linear-gradient(135deg,#7FB6B0,#2E6E6A)">
+            <div class="o-score"><div class="n">78</div><div class="l">Recuperación</div></div>
+            <div class="in"><div class="eyebrow">Semana 6 · post-cirugía de rodilla</div><h2 class="serif">Max</h2><div class="sm">Golden Retriever · 4 años · va adelantado 🐾</div></div>
+          </div>
+          <div class="o-card"><div class="oh"><h3 class="serif">Ejercicios de hoy en casa</h3><span class="eyebrow">3 de 4 · +15 pts</span></div>
+            <div class="exrow done"><div class="ck">✓</div><div class="th" style="background-image:url('https://placedog.net/120/120?id=5'),linear-gradient(135deg,#A8CFC9,#2E6E6A)"></div><div class="ex"><div class="t">Sentado-parado · 10 reps</div><div class="s">Fortalece cuádriceps · 2 series</div></div></div>
+            <div class="exrow done"><div class="ck">✓</div><div class="th" style="background-image:url('https://placedog.net/120/120?id=9'),linear-gradient(135deg,#A8CFC9,#2E6E6A)"></div><div class="ex"><div class="t">Caminata lenta con correa · 8 min</div><div class="s">Superficie plana, paso controlado</div></div></div>
+            <div class="exrow done"><div class="ck">✓</div><div class="th" style="background-image:url('https://placedog.net/120/120?id=18'),linear-gradient(135deg,#A8CFC9,#2E6E6A)"></div><div class="ex"><div class="t">Estiramiento de flexión · 3 reps</div><div class="s">Suave, sin forzar</div></div></div>
+            <div class="exrow"><div class="ck"></div><div class="th" style="background-image:url('https://placedog.net/120/120?id=21'),linear-gradient(135deg,#A8CFC9,#2E6E6A)"></div><div class="ex"><div class="t">Cavaletti (obstáculos bajos) · 5 pasadas</div><div class="s">Propiocepción · antes de dormir</div></div></div>
+          </div>
+          <div class="o-card"><div class="oh"><h3 class="serif">La evolución de Max</h3><span class="eyebrow">tus fotos</span></div>
+            <div class="o-strip">
+              <div class="s"><div class="img" style="background-image:url('https://placedog.net/200/240?id=15'),linear-gradient(135deg,#A8CFC9,#2E6E6A)"></div><div class="dl">Sem 0</div></div>
+              <div class="s"><div class="img" style="background-image:url('https://placedog.net/200/240?id=15'),linear-gradient(135deg,#A8CFC9,#2E6E6A);filter:brightness(.96)"></div><div class="dl">Sem 2</div></div>
+              <div class="s"><div class="img" style="background-image:url('https://placedog.net/200/240?id=15'),linear-gradient(135deg,#A8CFC9,#2E6E6A);filter:brightness(1.02)"></div><div class="dl">Sem 4</div></div>
+              <div class="s"><div class="img" style="background-image:url('https://placedog.net/200/240?id=15'),linear-gradient(135deg,#A8CFC9,#2E6E6A);filter:saturate(1.1) brightness(1.05)"></div><div class="dl">Hoy</div></div>
+            </div>
+            <div style="font-size:11.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5">Subí una foto después de cada sesión — así la Dra. Lily sigue su progreso real, y ganás <b>+5 pts</b> del Club.</div>
+          </div>
+          <div class="o-card"><div class="oh"><h3 class="serif">Su sesión en la caminadora de agua</h3></div>
+            <div class="videocard" style="background-image:url('https://placedog.net/700/400?id=15'),linear-gradient(135deg,#7FB6B0,#2E6E6A)"><div class="play">▶</div><div class="cap"><b>Max caminando en el agua</b><span>13 jul · 8 min · resistencia baja</span></div></div>
+          </div>
+          <div class="o-card"><div class="vetnote"><div class="va" style="background-image:url('https://placedog.net/120/120?id=32'),linear-gradient(135deg,#C9863E,#B4694E)"></div><div><div class="vt">"Max está respondiendo muy bien — el rango de la rodilla mejoró y ya apoya con más confianza. Mantengamos los ejercicios y sumamos un minuto de caminadora esta semana."</div><div class="vs">Dra. Lily Mora · su veterinaria</div></div></div></div>
+          <div class="o-card"><div class="appt-row"><div class="dt"><b>16</b><span>Jul</span></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Próxima sesión · 09:00</div><div style="font-size:12px;color:var(--ink-soft)">Hidroterapia + láser terapéutico</div></div><button class="btn btn-teal btn-sm" onclick="oscr('o-agendar',document.querySelectorAll('.ph-tabs button')[1])">Reagendar</button></div></div>
+        </div>
+
+        <!-- AGENDAR -->
+        <div class="oscreen" id="o-agendar">
+          <div style="margin-top:16px"><div class="eyebrow">Reservar</div><div class="bk-h serif">Agendá la sesión de Max</div><div class="bk-sub">Elegí la terapia, el día y la hora. Se confirma al instante.</div></div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-soft);margin-bottom:8px">Terapia</div>
+          <div class="ther-pick">
+            <div class="ther sel"><div class="im" style="background-image:url('https://placedog.net/200/140?id=15'),linear-gradient(135deg,#7FB6B0,#2E6E6A)"></div><div class="tx">Caminadora de agua<small>40 min · ₡32.000</small></div></div>
+            <div class="ther"><div class="im" style="background-image:url('https://placedog.net/200/140?id=9'),linear-gradient(135deg,#7FB6B0,#2E6E6A)"></div><div class="tx">Láser terapéutico<small>20 min · ₡18.000</small></div></div>
+            <div class="ther"><div class="im" style="background-image:url('https://placedog.net/200/140?id=18'),linear-gradient(135deg,#7FB6B0,#2E6E6A)"></div><div class="tx">Acupuntura<small>30 min · ₡38.000</small></div></div>
+            <div class="ther"><div class="im" style="background-image:url('https://placedog.net/200/140?id=21'),linear-gradient(135deg,#7FB6B0,#2E6E6A)"></div><div class="tx">Fisioterapia<small>45 min · ₡30.000</small></div></div>
+          </div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-soft);margin-bottom:8px">Día</div>
+          <div class="daypick">
+            <div class="dp"><div class="dw">Lun</div><div class="dn">14</div></div>
+            <div class="dp"><div class="dw">Mar</div><div class="dn">15</div></div>
+            <div class="dp sel"><div class="dw">Mié</div><div class="dn">16</div></div>
+            <div class="dp"><div class="dw">Jue</div><div class="dn">17</div></div>
+            <div class="dp"><div class="dw">Vie</div><div class="dn">18</div></div>
+          </div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-soft);margin-bottom:8px">Hora disponible</div>
+          <div class="slots">
+            <div class="slot off">08:00</div><div class="slot sel">09:00</div><div class="slot">10:30</div>
+            <div class="slot">11:15</div><div class="slot off">13:00</div><div class="slot">15:00</div>
+          </div>
+          <div class="o-card" style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><span style="font-size:22px">🐾</span><div style="flex:1;font-size:12px;color:var(--ink-soft)">Canjeá <b>200 pts</b> del Club por <b>10% de descuento</b> en esta sesión.</div><button class="btn btn-ghost btn-sm">Aplicar</button></div>
+          <button class="btn btn-amber" style="width:100%;justify-content:center" onclick="toast('Sesión reservada · Mié 16 jul · 09:00')">Confirmar · Mié 16 · 09:00</button>
+        </div>
+
+        <!-- CLUB (lealtad) -->
+        <div class="oscreen" id="o-club">
+          <div style="margin-top:16px"></div>
+          <div class="loy-hero">
+            <div class="lb">Club Artrivet · Huellas</div>
+            <div class="pts">240<small> pts</small></div>
+            <div class="nx">Te faltan <b>60 pts</b> para tu próxima recompensa 🎁</div>
+            <div class="loy-bar"><i style="width:80%"></i></div>
+          </div>
+          <div class="sec-title" style="margin:4px 0 12px"><h2 class="serif" style="font-size:20px">Canjeá tus huellas</h2></div>
+          <div class="reward"><div class="ri">💧</div><div class="rt"><div class="t">Sesión de caminadora de agua gratis</div><div class="s">Disponible al llegar a 300 pts</div></div><div class="rc">300 pts</div></div>
+          <div class="reward"><div class="ri">🛁</div><div class="rt"><div class="t">Baño & spa de cortesía</div><div class="s">Para Max</div></div><div class="rc">180 pts</div></div>
+          <div class="reward locked"><div class="ri">🎾</div><div class="rt"><div class="t">Kit de juguetes de rehab</div><div class="s">Se desbloquea con 400 pts</div></div><div class="rc">400 pts</div></div>
+          <div class="o-card"><div class="oh"><h3 class="serif">Cómo ganás huellas</h3></div>
+            <div class="earn"><div class="e">✓</div>Asistir a una sesión<b>+20</b></div>
+            <div class="earn"><div class="e">📷</div>Subir la foto del día<b>+5</b></div>
+            <div class="earn"><div class="e">🏃</div>Completar los ejercicios en casa<b>+15</b></div>
+            <div class="earn"><div class="e">👥</div>Referir a otra familia<b>+100</b></div>
+          </div>
+          <div class="o-card"><div class="oh"><h3 class="serif">Logros de Max</h3></div>
+            <div class="badges">
+              <div class="bdg"><div class="bi">🐾</div><span>Primera sesión</span></div>
+              <div class="bdg"><div class="bi">💧</div><span>10 en el agua</span></div>
+              <div class="bdg"><div class="bi">🔥</div><span>Racha 14 días</span></div>
+              <div class="bdg lock"><div class="bi">🏅</div><span>Alta funcional</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PERFIL -->
+        <div class="oscreen" id="o-perfil">
+          <div class="o-hero" style="height:200px;margin-top:16px;background-image:url('https://placedog.net/700/420?id=15'),linear-gradient(135deg,#7FB6B0,#2E6E6A)">
+            <div class="in"><div class="eyebrow">Paciente</div><h2 class="serif">Max</h2><div class="sm">Golden Retriever · 4 años · 31.4 kg</div></div>
+          </div>
+          <div class="o-card"><div class="oh"><h3 class="serif">Ficha</h3></div>
+            <div class="doc"><div class="di">🐶</div><div class="dt2">Tutor<small>Fam. Lacayo · San José</small></div></div>
+            <div class="doc"><div class="di">🩺</div><div class="dt2">Cirugía<small>TPLO rodilla derecha · 2 jun 2026</small></div></div>
+            <div class="doc"><div class="di">💊</div><div class="dt2">Medicación<small>Antiinflamatorio + condroprotector</small></div></div>
+          </div>
+          <div class="o-card"><div class="oh"><h3 class="serif">Documentos</h3><span class="eyebrow">firmados</span></div>
+            <div class="doc"><div class="di">📄</div><div class="dt2">Plan de rehabilitación<small>Firmado · 2 jun</small></div><span class="tg ok">OK</span></div>
+            <div class="doc"><div class="di">💧</div><div class="dt2">Consentimiento hidroterapia<small>Firmado · 15 jun</small></div><span class="tg ok">OK</span></div>
+            <div class="doc"><div class="di">🧾</div><div class="dt2">Facturas & pagos<small>2 pagadas · 1 pendiente</small></div></div>
+          </div>
+          <div class="o-card"><div class="oh"><h3 class="serif">Ayuda</h3></div>
+            <div class="doc"><div class="di">💬</div><div class="dt2">Chatear con Artrivet<small>Dudas sobre la rehab de Max</small></div></div>
+            <div class="doc"><div class="di">🔔</div><div class="dt2">Recordatorios<small>Ejercicios y medicación</small></div></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="ph-tabs">
+        <button class="on" onclick="oscr('o-inicio',this)"><span class="ti">🏠</span>Inicio</button>
+        <button onclick="oscr('o-agendar',this)"><span class="ti">📅</span>Agendar</button>
+        <button onclick="oscr('o-club',this)"><span class="ti">🐾</span>Club</button>
+        <button onclick="oscr('o-perfil',this)"><span class="ti">🐶</span>Perfil</button>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<!-- overlay grabar -->
+<div class="overlay" id="recOverlay">
+  <div class="modal" id="recLive">
+    <div class="rec-badge"><span class="rd"></span> Grabando la sesión</div>
+    <div class="wave"><span></span><span style="animation-delay:.1s"></span><span style="animation-delay:.2s"></span><span style="animation-delay:.3s"></span><span style="animation-delay:.15s"></span><span style="animation-delay:.25s"></span><span style="animation-delay:.05s"></span><span style="animation-delay:.35s"></span></div>
+    <div class="rec-timer serif" id="recTimer">00:00</div>
+    <div class="rec-cap">SAVIA escucha y toma notas. Atendé a Max con naturalidad — al terminar te propongo el acta de la sesión.</div>
+    <div class="modal-actions"><button class="btn btn-amber" onclick="finishRec()">Finalizar y generar acta</button><button class="btn btn-ghost" onclick="closeRec()">Cancelar</button></div>
+  </div>
+  <div class="modal hidden" id="recDone">
+    <div class="acta-top" style="justify-content:center"><div class="ai" style="width:46px;height:46px;border-radius:12px;font-size:22px">✦</div></div>
+    <h3 class="serif">Acta lista</h3><div class="rec-cap">SAVIA redactó el acta de la sesión: hallazgos, progreso y plan. Revisala y aprobala.</div>
+    <div class="modal-actions"><button class="btn btn-amber" onclick="goActas()">Ver el acta</button><button class="btn btn-ghost" onclick="closeRec()">Después</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+function dog(id,w,h,grad){return "background-image:url('https://placedog.net/"+w+"/"+h+"?id="+id+"'),linear-gradient(135deg,"+(grad||'#A8CFC9,#2E6E6A')+")";}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);}
+function setView(v){document.getElementById('viewConsole').classList.toggle('show',v==='console');document.getElementById('viewOwner').classList.toggle('show',v==='owner');document.getElementById('tgConsole').classList.toggle('on',v==='console');document.getElementById('tgOwner').classList.toggle('on',v==='owner');window.scrollTo(0,0);}
+function csec(btn,id){document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.csec').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');if(id==='s-ag')buildCal();}
+function oscr(id,btn){document.querySelectorAll('.oscreen').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('.ph-tabs button').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');const b=document.querySelector('.ph-body');if(b)b.scrollTo(0,0);}
+
+// ── pacientes ──
+const PETS=[
+  {id:15,nm:'Max',breed:'Golden Retriever · 4a',owner:'Fam. Lacayo',cond:'Post-TPLO rodilla',time:'09:00',next:true,score:78},
+  {id:24,nm:'Luna',breed:'Border Collie · 6a',owner:'Fam. Mora',cond:'Dolor lumbar · acupuntura',time:'10:30'},
+  {id:7,nm:'Rocco',breed:'Labrador · 8a',owner:'Fam. Solís',cond:'Displasia de cadera',time:'11:15'},
+  {id:33,nm:'Nina',breed:'Dachshund · 5a',owner:'Fam. Vega',cond:'Neuro · IVDD',time:'13:00'},
+  {id:41,nm:'Toby',breed:'Beagle · 3a',owner:'Fam. Rojas',cond:'Rehab post-fractura'},
+  {id:12,nm:'Kira',breed:'Pastor Alemán · 7a',owner:'Fam. Cruz',cond:'Artrosis · manejo dolor'},
+  {id:28,nm:'Simba',breed:'Golden · 2a',owner:'Fam. Díaz',cond:'Sobrepeso · acondicionamiento'},
+];
+function petCard(p,hot,active){
+  const right = p.next?'<div class="nextb"><span class="nx">Ahora</span><span class="tm">'+p.time+'</span></div>':(p.time?'<div class="time">'+p.time+'</div>':'');
+  return '<div class="pcard'+(active?' active':'')+'" onclick="selPet('+p.id+',this)"><div class="av" style="'+dog(p.id,90,90)+'"></div><div class="r-main" style="flex:1;min-width:0"><div class="nm">'+p.nm+'</div><div class="meta">'+p.cond+'</div></div>'+right+'</div>';
+}
+function renderList(){
+  document.getElementById('petList').innerHTML=PETS.filter(p=>p.time).map((p,i)=>petCard(p,true,i===0)).join('');
+  document.getElementById('petRecent').innerHTML=PETS.filter(p=>!p.time).map(p=>petCard(p,false,false)).join('');
+  selPet(15,null);
+}
+function selPet(id,el){
+  document.querySelectorAll('.pcard').forEach(c=>c.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const p=PETS.find(x=>x.id===id)||PETS[0];
+  renderExp(p);
+}
+function renderExp(p){
+  const exp=document.getElementById('exp');
+  exp.innerHTML=
+    '<div class="phead"><div class="big-av" style="'+dog(p.id,200,200)+'"></div>'+
+      '<div><div class="eyebrow">Expediente</div><h1 class="serif">'+p.nm+'</h1>'+
+      '<div class="psub">'+p.breed+' · '+p.owner+' · '+(p.cond)+'</div>'+
+      '<div class="chips"><span class="chip">'+p.cond+'</span><span class="chip">Hidroterapia</span><span class="chip warn">Semana 6</span></div></div>'+
+      '<div class="r"><button class="btn btn-ghost btn-sm" onclick="setView(\'owner\')">Ver como el dueño ↗</button></div></div>'+
+    '<div class="tabs">'+
+      '<button class="tab active" onclick="tab(this,\'t-brief\')">Antes de la sesión</button>'+
+      '<button class="tab" onclick="tab(this,\'t-plan\')">Plan de rehab</button>'+
+      '<button class="tab" onclick="tab(this,\'t-prog\')">Progreso</button>'+
+      '<button class="tab" onclick="tab(this,\'t-hist\')">Historia clínica</button>'+
+      '<button class="tab" onclick="tab(this,\'t-actas\')">Actas</button></div>'+
+    '<div class="pane show" id="t-brief">'+paneBrief(p)+'</div>'+
+    '<div class="pane" id="t-plan">'+panePlan(p)+'</div>'+
+    '<div class="pane" id="t-prog">'+paneProg(p)+'</div>'+
+    '<div class="pane" id="t-hist">'+paneHist(p)+'</div>'+
+    '<div class="pane" id="t-actas">'+paneActas(p)+'</div>';
+  wireBA();
+}
+function tab(btn,id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.pane').forEach(p=>p.classList.remove('show'));document.getElementById(id).classList.add('show');document.getElementById('exp').scrollTo({top:0,behavior:'smooth'});}
+
+function paneBrief(p){
+  return '<div class="hero"><div class="k">Sesión de hoy · 09:00</div><h2 class="serif">La sesión de '+p.nm+' es en 20 minutos</h2>'+
+    '<p class="lede">Semana 6 post-cirugía. El dueño subió <b>fotos y videos en casa</b>: la movilidad de la rodilla <b>viene mejorando</b> y ya apoya con más confianza. Cumplió <b>82%</b> de los ejercicios en casa. Hoy: <b>hidroterapia + láser terapéutico</b>.</p>'+
+    '<div class="cta-row"><button class="btn btn-rec" onclick="openRec()"><span class="rd"></span> Grabar la sesión</button>'+
+    '<button class="btn btn-ghost" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.28)" onclick="tab(document.querySelectorAll(\'.tab\')[2],\'t-prog\')">Ver progreso</button></div></div>'+
+    '<div class="sec-title"><h2 class="serif">Qué revisar hoy</h2><span class="eyebrow">SAVIA conectó fotos + sesiones + ejercicios en casa</span></div>'+
+    '<div class="att warn"><span class="dot"></span><div style="flex:1"><div class="t">Apoyo de la pata trasera derecha</div><div class="s">En los videos de esta semana carga un poco menos al trotar. Vale valorar antes de subir la carga en la caminadora.</div>'+
+      '<div class="att-photos"><div class="ap" style="'+dog(p.id,120,120)+'"><span>Sem 4</span></div><div class="ap" style="'+dog(p.id,120,120)+';filter:brightness(1.02)"><span>Sem 5</span></div><div class="ap" style="'+dog(p.id,120,120)+';filter:saturate(1.1)"><span>Hoy</span></div></div></div></div>'+
+    '<div class="att info"><span class="dot"></span><div><div class="t">Reforzá los ejercicios de fin de semana</div><div class="s">Los sábados/domingos bajan los registros — quizá los hace y no los marca. Confirmalo con la familia.</div></div></div>'+
+    '<div class="att ok"><span class="dot"></span><div><div class="t">Peso bajo control</div><div class="s">−1.2 kg desde el ingreso: menos carga sobre la articulación, mejor pronóstico.</div></div></div>'+
+    '<div class="grid3" style="margin-top:18px">'+
+      '<div class="stat"><div class="lab">Recuperación</div><div class="v">'+(p.score||72)+'<small>/100</small></div><div class="bar"><i style="width:'+(p.score||72)+'%"></i></div></div>'+
+      '<div class="stat"><div class="lab">Ejercicios en casa</div><div class="v">82<small>%</small></div><div class="bar"><i style="width:82%"></i></div></div>'+
+      '<div class="stat"><div class="lab">Sesiones completadas</div><div class="v">11<small>/16</small></div><div class="d">plan de 8 semanas</div></div>'+
+    '</div>';
+}
+function panePlan(p){
+  const T=[
+    {img:15,cat:'Hidroterapia',nm:'Caminadora de agua',ts:'2×/sem · resistencia baja→media · 8→12 min',pct:55,l:'sem 6'},
+    {img:9,cat:'Fotobiomodulación',nm:'Láser terapéutico',ts:'2×/sem · sobre la incisión y rodilla',pct:60,l:'activo'},
+    {img:18,cat:'Medicina integrativa',nm:'Acupuntura',ts:'1×/sem · manejo del dolor',pct:50,l:'activo'},
+    {img:21,cat:'Ejercicio terapéutico',nm:'Fortalecimiento + propiocepción',ts:'En casa · sentado-parado, cavaletti, equilibrio',pct:82,l:'82%'},
+  ];
+  return '<div class="sec-title"><h2 class="serif">Plan de rehabilitación</h2><button class="btn btn-teal btn-sm add" onclick="toast(\'Agregar terapia al plan\')">+ Agregar terapia</button></div>'+
+    T.map(t=>'<div class="tcard"><div class="tph" style="'+dog(t.img,200,200)+'"></div><div class="ti"><span class="pill'+(t.cat==='Ejercicio terapéutico'?' amber':'')+'">'+t.cat+'</span><h4 class="serif">'+t.nm+'</h4><div class="ts">'+t.ts+'</div><div class="tprog"><div class="b"><i style="width:'+t.pct+'%"></i></div><div class="l">'+t.l+'</div></div></div></div>').join('')+
+    '<div class="sec-title"><h2 class="serif">Calendario del tratamiento</h2></div>'+
+    '<div class="cal"><div class="cal-head"><h3 class="serif">julio 2026</h3><div class="cal-legend"><span><i style="background:var(--teal)"></i>Hidroterapia</span><span><i style="background:var(--amber)"></i>Láser</span><span><i style="background:var(--clay)"></i>Acupuntura</span></div></div><div class="cal-grid" id="planCal"></div></div>';
+}
+function paneProg(p){
+  const weeks=['Sem 0','Sem 1','Sem 2','Sem 3','Sem 4','Sem 5','Hoy'];
+  const stream=weeks.map((w,i)=>'<div class="day'+(i===weeks.length-1?' sel':'')+'"><div class="img" style="'+dog(p.id,200,240)+';filter:brightness('+(0.9+i*0.03)+')"></div><div class="dl">'+w+'</div></div>').join('');
+  return '<div class="sec-title"><h2 class="serif">Evolución en fotos</h2><span class="eyebrow">del dueño · una por sesión</span></div>'+
+    '<div class="card"><div class="lead">La familia sube una foto después de cada sesión — misma pose, así se compara de verdad.</div><div class="stream">'+stream+'</div>'+
+      '<div style="border-top:1px solid var(--line);margin-top:6px;padding-top:8px">'+
+      '<div class="change"><div class="cd">Sem 5</div><div class="cb"><b>Apoyo</b> de la pata más constante al caminar.</div></div>'+
+      '<div class="change"><div class="cd">Sem 3</div><div class="cb"><b>Rango de flexión</b> de rodilla en aumento respecto al ingreso.</div></div>'+
+      '<div class="change"><div class="cd">Sem 1</div><div class="cb"><b>Inflamación</b> post-quirúrgica resuelta, incisión cerrada.</div></div></div></div>'+
+    '<div class="sec-title"><h2 class="serif">Comparar · ingreso vs hoy</h2></div>'+
+    '<div class="ba" id="ba"><div class="layer after" style="'+dog(p.id,700,560)+'"></div><div class="layer before" style="'+dog(p.id,700,560)+'"></div>'+
+      '<span class="tag l">Ingreso · 2 jun</span><span class="tag r">Hoy · 13 jul</span><div class="handle" id="baHandle"></div><input type="range" min="0" max="100" value="50" id="baRange"></div>'+
+    '<div class="sec-title"><h2 class="serif">Sesión en la caminadora de agua</h2></div>'+
+    '<div class="videocard" style="'+dog(p.id,700,400,'#7FB6B0,#2E6E6A')+'"><div class="play">▶</div><div class="cap"><b>'+p.nm+' en el agua</b><span>13 jul · 8 min · resistencia baja · marcha simétrica</span></div></div>'+
+    '<div class="grid2" style="margin-top:15px"><div class="card"><h3 class="serif">Movilidad (rango de rodilla)</h3><div class="lead">grados de flexión</div><svg class="chart" viewBox="0 0 300 120" preserveAspectRatio="none"><line class="gl" x1="0" y1="30" x2="300" y2="30"/><line class="gl" x1="0" y1="60" x2="300" y2="60"/><line class="gl" x1="0" y1="90" x2="300" y2="90"/><path class="ar" d="M0,86 L100,70 L200,52 L300,38 L300,120 L0,120 Z"/><polyline class="ln" points="0,86 100,70 200,52 300,38"/><circle class="dt" cx="0" cy="86" r="3.5"/><circle class="dt" cx="300" cy="38" r="4.5"/></svg><div style="font-size:11px;color:var(--muted);margin-top:8px">95° → 128° en 6 semanas</div></div>'+
+    '<div class="card"><h3 class="serif">Peso corporal</h3><div class="lead">kg · manejo de carga</div><svg class="chart" viewBox="0 0 300 120" preserveAspectRatio="none"><line class="gl" x1="0" y1="30" x2="300" y2="30"/><line class="gl" x1="0" y1="60" x2="300" y2="60"/><line class="gl" x1="0" y1="90" x2="300" y2="90"/><polyline class="ln" points="0,40 75,48 150,56 225,62 300,66"/></svg><div style="font-size:11px;color:var(--muted);margin-top:8px">−1.2 kg · dentro del objetivo</div></div></div>';
+}
+function paneHist(p){
+  return '<div class="hc-grid">'+
+    '<div class="hc"><div class="hh"><div class="ci"><svg class="ic" viewBox="0 0 24 24" style="width:17px;height:17px"><circle cx="12" cy="8" r="3.5"/><path d="M5 20v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1"/></svg></div><h4 class="serif">Paciente</h4></div><div class="f"><div class="k">Especie / raza</div><div class="v">Canino · '+p.breed+'</div></div><div class="f"><div class="k">Tutor</div><div class="v">'+p.owner+'</div></div><div class="f"><div class="k">Peso / condición</div><div class="v">31.4 kg · sobrepeso leve</div></div></div>'+
+    '<div class="hc"><div class="hh"><div class="ci"><svg class="ic" viewBox="0 0 24 24" style="width:17px;height:17px"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></div><h4 class="serif">Diagnóstico</h4></div><div class="f"><div class="k">Motivo de rehab</div><div class="v">Ruptura de ligamento cruzado craneal (derecho)</div></div><div class="f"><div class="k">Cirugía</div><div class="v">TPLO · 2 jun 2026 · Dr. referente</div></div><div class="f"><div class="k">Medicación</div><div class="tagline"><span class="tg ok">Antiinflamatorio</span> <span class="tg ok">Condroprotector</span></div></div></div>'+
+    '<div class="hc"><div class="hh"><div class="ci"><svg class="ic" viewBox="0 0 24 24" style="width:17px;height:17px"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/></svg></div><h4 class="serif">Consentimientos</h4></div><div class="f" style="display:flex;justify-content:space-between;align-items:center"><div class="v">Plan de rehabilitación</div><span class="tg ok">Firmado</span></div><div class="f" style="display:flex;justify-content:space-between;align-items:center"><div class="v">Hidroterapia</div><span class="tg ok">Firmado</span></div><div class="f" style="display:flex;justify-content:space-between;align-items:center"><div class="v">Sedación (si aplica)</div><span class="tg due">Pendiente</span></div></div>'+
+    '</div>'+
+    '<div class="grid2" style="margin-top:15px"><div class="card"><h3 class="serif">Notas por sesión</h3><div class="lead">De las actas aprobadas</div><div class="change"><div class="cd">6 jul</div><div class="cb">Buen apoyo. Sumar 1 min de caminadora. Sin dolor a la palpación.</div></div><div class="change"><div class="cd">29 jun</div><div class="cb">Rango de rodilla mejora. Iniciar cavaletti en casa.</div></div><div class="change"><div class="cd">15 jun</div><div class="cb">Primera sesión de hidroterapia. Tolerancia buena.</div></div></div>'+
+    '<div class="card"><h3 class="serif">Objetivo de rehab</h3><div class="lead">&nbsp;</div><p style="font-size:13.5px;line-height:1.6;color:#2b3a36">Recuperar carga completa y marcha simétrica en la pata derecha; retorno a actividad normal (juego, escaleras) sin dolor. Meta: <b>alta funcional en 8–9 semanas</b>.</p></div></div>';
+}
+function paneActas(p){
+  return '<div class="sec-title"><h2 class="serif">Acta de la sesión</h2><span class="eyebrow">generada por SAVIA</span></div>'+
+    '<div class="acta"><div class="acta-top"><div class="ai">✦</div><div><h2 class="serif">Sesión de rehab · hidroterapia + láser</h2><div class="byline">Hoy · 35 min · voz + videos en casa · redactada por SAVIA</div></div><span class="badge-ai">Borrador · revisá y aprobá</span></div>'+
+    '<section><div class="lab">Motivo / estado</div><p>Control de semana 6 post-TPLO. La familia reporta mejor apoyo y buena adherencia a los ejercicios en casa; leve menor carga en la pata al trotar.</p></section>'+
+    '<section><div class="lab">Evolución desde la última sesión <span style="color:var(--muted);font-weight:600;text-transform:none;letter-spacing:0">· de las fotos y videos</span></div><ul><li>Rango de flexión de rodilla en aumento (95°→128° acumulado).</li><li>Marcha más simétrica en caminadora de agua a resistencia baja.</li><li>Peso −1.2 kg respecto al ingreso.</li></ul></section>'+
+    '<section><div class="lab">Hallazgos de hoy</div><ul><li>Incisión cerrada, sin signos de dolor a la palpación.</li><li>Leve asimetría de apoyo trasero al trote — a vigilar.</li><li>Buena tolerancia a 8 min de caminadora.</li></ul></section>'+
+    '<section><div class="lab">Fotos / video de la sesión</div><div class="acta-photos"><div class="ph" style="'+dog(p.id,200,200)+'"></div><div class="ph" style="'+dog(p.id,200,200)+';filter:brightness(1.03)"></div><div class="ph" style="'+dog(p.id,200,200)+';filter:saturate(1.1)"></div></div></section>'+
+    '<section><div class="lab">Plan</div><ul><li>Subir caminadora de agua a 9 min, mantener resistencia baja.</li><li>Continuar láser 2×/sem sobre rodilla.</li><li>Reforzar cavaletti en casa; reevaluar apoyo trasero en la próxima sesión.</li></ul></section>'+
+    '<div class="acta-actions"><button class="btn btn-amber btn-sm" onclick="toast(\'Acta aprobada y enviada a la familia\')">Aprobar y guardar</button><button class="btn btn-ghost btn-sm">Editar</button><button class="btn btn-ghost btn-sm">Enviar resumen al dueño</button></div>'+
+    '<div class="acta-note">SAVIA fusiona lo conversado en la sesión + las fotos/videos en casa + los datos de rehab. <b>Nada se guarda hasta que la doctora aprueba.</b></div></div>'+
+    '<div class="sec-title" style="margin-top:26px"><h2 class="serif">Sesiones anteriores</h2></div>'+
+    '<div class="past"><div class="dt serif">6 jul</div><div class="ttl">Hidroterapia + ejercicio terapéutico</div><div class="st">Aprobada</div></div>'+
+    '<div class="past"><div class="dt serif">29 jun</div><div class="ttl">Láser + acupuntura</div><div class="st">Aprobada</div></div>'+
+    '<div class="past"><div class="dt serif">15 jun</div><div class="ttl">Primera sesión de hidroterapia</div><div class="st">Aprobada</div></div>';
+}
+function wireBA(){const r=document.getElementById('baRange');if(!r)return;function u(){document.querySelector('#ba .before').style.clipPath='inset(0 '+(100-r.value)+'% 0 0)';document.getElementById('baHandle').style.left=r.value+'%';}r.addEventListener('input',u);u();
+  buildCalInto('planCal',{2:[{c:'ev-teal',t:'Hidro'}],4:[{c:'ev-amber',t:'Láser'}],7:[{c:'ev-clay',t:'Acupunt.'}],9:[{c:'ev-teal',t:'Hidro'}],11:[{c:'ev-amber',t:'Láser'}],14:[{c:'ev-teal',t:'Hidro'}],16:[{c:'ev-amber',t:'Control'}],18:[{c:'ev-teal',t:'Hidro'}]},13);}
+
+// ── calendarios ──
+function buildCalInto(elId,ev,today){const el=document.getElementById(elId);if(!el)return;const dow=['L','M','M','J','V','S','D'];let h=dow.map(d=>'<div class="cal-dow">'+d+'</div>').join('');const offset=2,dim=31;for(let i=0;i<offset;i++)h+='<div class="cal-cell empty"></div>';for(let d=1;d<=dim;d++){const e=ev[d]||[];h+='<div class="cal-cell'+(d===today?' today':'')+'"><div class="d">'+d+'</div>'+e.slice(0,2).map(x=>'<div class="cal-ev '+x.c+'">'+x.t+'</div>').join('')+'</div>';}el.innerHTML=h;}
+function buildCal(){buildCalInto('calGrid',{2:[{c:'ev-teal',t:'6 hidro'}],4:[{c:'ev-amber',t:'4 consultas'}],7:[{c:'ev-teal',t:'sesiones'}],9:[{c:'ev-amber',t:'controles'}],13:[{c:'ev-teal',t:'Max 09:00'},{c:'ev-clay',t:'+8'}],14:[{c:'ev-teal',t:'7 sesiones'}],16:[{c:'ev-amber',t:'consultas'}],21:[{c:'ev-teal',t:'sesiones'}],23:[{c:'ev-clay',t:'controles'}],28:[{c:'ev-teal',t:'sesiones'}]},13);}
+
+// ── terapias catálogo ──
+const TER=[
+  {img:15,cat:'Hidroterapia',nm:'Caminadora de agua',d:'Marcha en flotación: menos carga articular, más fuerza contra resistencia. Ideal post-quirúrgico.'},
+  {img:9,cat:'Fotobiomodulación',nm:'Láser terapéutico',d:'Acelera la reparación de tejido, baja inflamación y dolor. Sobre incisiones y articulaciones.'},
+  {img:18,cat:'Medicina integrativa',nm:'Acupuntura',d:'Estimula puntos nerviosos, libera endorfinas. Manejo del dolor crónico y neurológico.'},
+  {img:21,cat:'Ejercicio terapéutico',nm:'Fisioterapia & propiocepción',d:'Cavaletti, equilibrio, fortalecimiento dirigido. En clínica y en casa.'},
+  {img:7,cat:'Electroterapia',nm:'Electroestimulación (NMES/TENS)',d:'Reactiva músculo y controla el dolor tras inmovilización.'},
+  {img:33,cat:'Ondas',nm:'Ultrasonido / onda de choque',d:'Tejidos profundos, tendones y entesis; estimula la cicatrización.'},
+];
+function renderTer(){document.getElementById('terBody').innerHTML='<div class="grid2">'+TER.map(t=>'<div class="tcard"><div class="tph" style="'+dog(t.img,200,200)+'"></div><div class="ti"><span class="pill">'+t.cat+'</span><h4 class="serif">'+t.nm+'</h4><div class="ts">'+t.d+'</div></div></div>').join('')+'</div>';}
+
+// ── facturas + inventario ──
+function renderFac(){document.getElementById('facTable').innerHTML='<tr><th>Paciente</th><th>Concepto</th><th>Fecha</th><th>Estado</th><th style="text-align:right">Monto</th></tr>'+
+  [['Max',15,'Paquete rehab · 8 sem','2 jun','ok','₡420.000'],['Luna',24,'Acupuntura · sesión 4','3 jul','ok','₡38.000'],['Rocco',7,'Hidroterapia · sesión 6','4 jul','due','₡32.000'],['Nina',33,'Evaluación neuro + láser','4 jul','ok','₡64.000'],['Kira',12,'Control artrosis','3 jul','due','₡28.000']]
+  .map(r=>'<tr><td><div class="pet"><div class="a" style="'+dog(r[1],80,80)+'"></div>'+r[0]+'</div></td><td>'+r[2]+'</td><td>'+r[3]+'</td><td><span class="tg '+r[4]+'">'+(r[4]==='ok'?'Pagada':'Pendiente')+'</span></td><td class="num">'+r[5]+'</td></tr>').join('');}
+function renderInv(){document.getElementById('invGrid').innerHTML=[
+  ['Equipo','Caminadora de agua','Mantenimiento al día · próx. 09/2026',15,'1','equipo','ok','operativa'],
+  ['Fotobiomodulación','Láser terapéutico Clase IV','Calibrado · uso alto',9,'1','equipo','ok','operativo'],
+  ['Consumible','Agujas de acupuntura','caja x100',18,'6','cajas','due','Reordenar'],
+  ['Consumible','Electrodos NMES','pares',7,'12','pares','ok','OK'],
+  ['Suplemento','Condroprotector','frascos',33,'4','frascos','due','Bajo'],
+  ['Consumible','Gel de ultrasonido','litros',21,'9','L','ok','OK'],
+].map(r=>'<div class="prod"><div class="ph" style="'+dog(r[3],400,300)+'"><span class="cat">'+r[0]+'</span></div><h4 class="serif">'+r[1]+'</h4><div class="subx">'+r[2]+'</div><div class="gauge"><span class="n">'+r[4]+'</span><span class="u">'+r[5]+'</span><span class="tg '+r[6]+'">'+r[7]+'</span></div><div class="sb"><i style="width:'+(r[6]==='ok'?'70%;background:var(--teal)':'22%;background:var(--amber)')+'"></i></div><div class="foot"><span>rehab</span><span>Artrivet</span></div></div>').join('');}
+
+// ── grabar ──
+let recInt=null,recSec=0;
+function openRec(){document.getElementById('recLive').classList.remove('hidden');document.getElementById('recDone').classList.add('hidden');document.getElementById('recOverlay').classList.add('show');recSec=0;tk();recInt=setInterval(tk,1000);}
+function tk(){const m=String(Math.floor(recSec/60)).padStart(2,'0'),s=String(recSec%60).padStart(2,'0');document.getElementById('recTimer').textContent=m+':'+s;recSec++;}
+function finishRec(){clearInterval(recInt);document.getElementById('recLive').classList.add('hidden');document.getElementById('recDone').classList.remove('hidden');}
+function goActas(){closeRec();tab(document.querySelectorAll('.tab')[4],'t-actas');}
+function closeRec(){clearInterval(recInt);document.getElementById('recOverlay').classList.remove('show');}
+
+renderList();renderTer();renderFac();renderInv();
+</script>
+</body>
+</html>
