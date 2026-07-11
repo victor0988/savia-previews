@@ -339,36 +339,50 @@
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:12px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:80;box-shadow:0 12px 28px rgba(34,49,46,.28);display:none}.toast.show{display:block}
   .hidden{display:none}
 
-  /* ── RESPONSIVE (móvil/tablet) ── */
+  /* ── RESPONSIVE (móvil): la doctora usa la consola desde el celular ── */
   @media (max-width:860px){
-    .demo-top{flex-wrap:wrap;height:auto;padding:8px 14px;gap:8px}
-    .brand .tg,.demo-top .spacer{display:none}
-    .toggle{order:3;flex:1 1 100%}.toggle button{flex:1}
-    .app{grid-template-columns:54px 1fr;height:auto}
-    .rail{padding:10px 0;gap:2px;position:sticky;top:0;align-self:start}
-    .nav{width:50px}.nav .lbl{display:none}.nav .ico{width:40px;height:36px}
-    .rail .grow{flex:0}.rail .me{margin-top:12px}
-    .content{overflow:visible}.csec{overflow:visible}
-    .pat-wrap{grid-template-columns:1fr;height:auto}
-    .plist{border-right:none;border-bottom:1px solid var(--border);overflow:visible;padding:12px}
-    #petList,#petRecent{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-    #petList .pcard,#petRecent .pcard{flex:none;width:212px}
-    .exp{padding:18px 16px 50px;max-width:100%}
-    .scroll{padding:16px 16px 44px}
+    html,body{overflow-x:hidden}
+    .demo-top{flex-wrap:wrap;height:auto;padding:8px 12px;gap:8px}
+    .brand .nm{font-size:17px}.brand .tg,.demo-top .spacer{display:none}
+    .toggle{order:3;flex:1 1 100%}.toggle button{flex:1;padding:8px 0}
+
+    /* app = una sola columna; el rail baja a barra de tabs fija abajo */
+    .app{grid-template-columns:minmax(0,1fr);height:auto}
+    .rail{position:fixed;left:0;right:0;bottom:0;flex-direction:row;height:auto;
+      padding:5px 2px calc(6px + env(safe-area-inset-bottom));gap:0;justify-content:space-around;
+      z-index:45;border-top:1px solid rgba(255,255,255,.1)}
+    .rail .logo,.rail .grow,.rail .me{display:none}
+    .nav{flex:1;width:auto;padding:5px 0;gap:3px}
+    .nav .lbl{display:block;font-size:8px}
+    .nav .ico{width:34px;height:26px}
+    .nav.active .ico{background:var(--amber-soft)}
+
+    .content{min-width:0;overflow:visible}
+    .csec{min-width:0;overflow:visible}
+    .pat-wrap{grid-template-columns:minmax(0,1fr);height:auto;min-width:0}
+    .plist{min-width:0;border-right:none;border-bottom:1px solid var(--border);overflow:visible;padding:12px 12px 8px}
+    .plist .search{margin-bottom:10px}
+    #petList,#petRecent{min-width:0;display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+    #petList .pcard,#petRecent .pcard{flex:none;width:210px}
+    .exp{min-width:0;max-width:100%;padding:18px 16px 96px}   /* bottom pad = barra de tabs */
+    .scroll{min-width:0;padding:16px 16px 96px}
     .cbar{padding:0 16px}
+
     .grid2,.grid3,.grid4,.hc-grid,.inv-grid{grid-template-columns:1fr}
     .kpibar{grid-template-columns:1fr 1fr}
-    .phead{flex-wrap:wrap}.phead .r{margin-left:0;width:100%}
-    .tabs{flex-wrap:nowrap;overflow-x:auto}.tab{white-space:nowrap}
+    .phead{flex-wrap:wrap}.phead>div{min-width:0}.phead .r{margin-left:0;width:100%}
+    .phead .r .btn{flex:1;justify-content:center}
+    .tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}.tab{white-space:nowrap;padding:11px 12px}
     .table{display:block;overflow-x:auto;white-space:nowrap}
-    .ba{height:240px}
+    .ba{height:250px}
     .owner{padding:18px 12px}
   }
   @media (max-width:480px){
     .kpibar{grid-template-columns:1fr}
-    .phead .big-av{width:60px;height:60px}
-    .phead h1{font-size:27px}
-    .hero{padding:20px}.hero h2{font-size:23px}
+    .phead{gap:12px}.phead .big-av{width:58px;height:58px}
+    .phead h1{font-size:26px}
+    .hero{padding:20px}.hero h2{font-size:22px}
+    .hero .cta-row .btn{flex:1;justify-content:center}
   }
 </style>
 </head>
