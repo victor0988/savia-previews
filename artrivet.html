@@ -338,6 +338,38 @@
   .modal-actions{display:flex;gap:10px;justify-content:center}.modal h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:4px}
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:12px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:80;box-shadow:0 12px 28px rgba(34,49,46,.28);display:none}.toast.show{display:block}
   .hidden{display:none}
+
+  /* ── RESPONSIVE (móvil/tablet) ── */
+  @media (max-width:860px){
+    .demo-top{flex-wrap:wrap;height:auto;padding:8px 14px;gap:8px}
+    .brand .tg,.demo-top .spacer{display:none}
+    .toggle{order:3;flex:1 1 100%}.toggle button{flex:1}
+    .app{grid-template-columns:54px 1fr;height:auto}
+    .rail{padding:10px 0;gap:2px;position:sticky;top:0;align-self:start}
+    .nav{width:50px}.nav .lbl{display:none}.nav .ico{width:40px;height:36px}
+    .rail .grow{flex:0}.rail .me{margin-top:12px}
+    .content{overflow:visible}.csec{overflow:visible}
+    .pat-wrap{grid-template-columns:1fr;height:auto}
+    .plist{border-right:none;border-bottom:1px solid var(--border);overflow:visible;padding:12px}
+    #petList,#petRecent{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+    #petList .pcard,#petRecent .pcard{flex:none;width:212px}
+    .exp{padding:18px 16px 50px;max-width:100%}
+    .scroll{padding:16px 16px 44px}
+    .cbar{padding:0 16px}
+    .grid2,.grid3,.grid4,.hc-grid,.inv-grid{grid-template-columns:1fr}
+    .kpibar{grid-template-columns:1fr 1fr}
+    .phead{flex-wrap:wrap}.phead .r{margin-left:0;width:100%}
+    .tabs{flex-wrap:nowrap;overflow-x:auto}.tab{white-space:nowrap}
+    .table{display:block;overflow-x:auto;white-space:nowrap}
+    .ba{height:240px}
+    .owner{padding:18px 12px}
+  }
+  @media (max-width:480px){
+    .kpibar{grid-template-columns:1fr}
+    .phead .big-av{width:60px;height:60px}
+    .phead h1{font-size:27px}
+    .hero{padding:20px}.hero h2{font-size:23px}
+  }
 </style>
 </head>
 <body>
